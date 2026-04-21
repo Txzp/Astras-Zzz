@@ -35,7 +35,7 @@
 
 <div align="center">
 
-**Made with 💜 by Ta Hub Zzz | 7xp**
+**Made with 💜 by Astra Hub Zzz | 7xp**
 
 **Serve Discord: https://discord.gg/drR7ZVKPXe**
 
