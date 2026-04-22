@@ -1,5 +1,4 @@
--- ASTRA HUB - Script completo
-local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/TzHzk/WindUI-Modificado/main/WindUI-main/dist/main.lua"))()
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -150,7 +149,7 @@ ESPTab:Slider({
     end
 })
 
--- Keybinds
+-- Keybinds (corregido - sin Flag)
 KeysTab:Keybind({
     Title = "Abrir/Cerrar Hub",
     Value = "K",
