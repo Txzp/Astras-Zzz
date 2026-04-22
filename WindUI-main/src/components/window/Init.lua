@@ -1863,30 +1863,30 @@ return function(Config)
 			if not Window.IgnoreAlerts then
 				ClickedClose = true
 				--Window:SetToTheCenter()
-				Window:Dialog({
-					--Icon = "trash-2",
-					Title = "Close Window",
-					Content = "Do you want to close this window? You will not be able to open it again.",
-					Buttons = {
-						{
-							Title = "Cancel",
-							--Icon = "chevron-left",
-							Callback = function()
-								ClickedClose = false
-							end,
-							Variant = "Secondary",
-						},
-						{
-							Title = "Close Window",
-							--Icon = "chevron-down",
-							Callback = function()
-								ClickedClose = false
-								Window:Destroy()
-							end,
-							Variant = "Primary",
-						},
-					},
-				})
+Window:Dialog({
+    --Icon = "trash-2", -- Opcional: puedes poner un icono de alerta si quieres
+    Title = "Close | AstrasHub", -- Título personalizado
+    Content = "Are you sure you want to close the AstrasHub interface?", -- Descripción personalizada
+    Buttons = {
+        {
+            Title = "Cancel",
+            Callback = function()
+                ClickedClose = false
+            end,
+            Variant = "Secondary", -- Botón gris/oscuro normal
+        },
+        {
+            Title = "Confirm", -- Texto del botón cambiado
+            Callback = function()
+                ClickedClose = false
+                Window:Destroy()
+            end,
+            -- Usamos "Primary" pero forzamos el color ROJO manualmente para asegurar
+            Variant = "Primary", 
+            Color = Color3.fromRGB(255, 60, 60), -- Rojo brillante personalizado
+        },
+    },
+})
 			else
 				Window:Destroy()
 			end
