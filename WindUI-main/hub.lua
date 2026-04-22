@@ -1,11 +1,11 @@
 -- ═══════════════════════════════════════════════════════════════
 --   ASTRASHUB ZZ - By TzHzk
---   Speed | JumpPower | ESP Highlight
---   Usando Sliders Estables
+--   Speed | JumpPower | ESP Highlight | Keybinds
+--   Optimizado para Solara + WindUI Oficial
 -- ═══════════════════════════════════════════════════════════════
 
--- Cargar WindUI desde tu repositorio público
-local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
+-- Cargar WindUI Oficial (Footagesus) - Es la más estable
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -120,7 +120,7 @@ MainTab:Button({
     end
 })
 
--- PLAYER TAB (CON SLIDERS)
+-- PLAYER TAB (CON SLIDERS FUNCIONALES)
 PlayerTab:Toggle({
     Title = "⚡ Speed Activado",
     Value = false,
@@ -130,7 +130,7 @@ PlayerTab:Toggle({
     end
 })
 
--- Slider de Velocidad (Sintaxis segura)
+-- Slider de Velocidad (Sintaxis segura para Solara)
 PlayerTab:Slider({
     Title = "Velocidad",
     Value = { Min = 16, Max = 120, Default = 16 },
@@ -170,7 +170,7 @@ ESPTab:Toggle({
     end
 })
 
--- Slider de Opacidad (Evitamos Colorpicker para asegurar estabilidad)
+-- Slider de Opacidad
 ESPTab:Slider({
     Title = "Opacidad del ESP",
     Value = { Min = 0, Max = 1, Default = 0.5 },
@@ -180,12 +180,12 @@ ESPTab:Slider({
     end
 })
 
--- SETTINGS TAB (KEYBIND)
+-- SETTINGS TAB (KEYBIND FUNCIONAL)
 SettingsTab:Keybind({
     Title = "Tecla Abrir/Cerrar",
     Value = "K", -- Valor inicial como string
     Callback = function(key)
-        -- WindUI suele devolver el nombre de la tecla, lo convertimos a Enum
+        -- WindUI devuelve el nombre de la tecla, lo convertimos a Enum
         local success, enumKey = pcall(function()
             return Enum.KeyCode[key]
         end)
