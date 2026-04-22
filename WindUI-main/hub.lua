@@ -1,27 +1,39 @@
--- ASTRA HUB ZZ - TESTING VERSION (Estable)
--- Carga WindUI Oficial para asegurar compatibilidad
-local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
+-- ═══════════════════════════════════════════════════════════════
+--   ASTRASHUB ZZ - By TzHzk
+--   Speed | JumpPower | ESP Highlight
+--   Usando TU WindUI Modificado (Sliders Verdes)
+-- ═══════════════════════════════════════════════════════════════
+
+-- Cargar TU WindUI Modificado desde GitHub
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local LP = Players.LocalPlayer
 
--- Variables
+-- Variables Globales
 local SpeedEnabled = false
 local SpeedValue = 16
+local JumpEnabled = false
+local JumpValue = 50
 local ESPEnabled = false
 local ESPFill = 0.5
 local ESPObjects = {}
+local ToggleKey = Enum.KeyCode.K
 local Window = nil
 
--- Funciones Lógicas
+-- ═══════════════════════════════════════════════════════════════
+-- FUNCIONES LÓGICAS
+-- ═══════════════════════════════════════════════════════════════
+
 local function ApplySpeed()
     local char = LP.Character
     if not char then return end
     local hum = char:FindFirstChildOfClass("Humanoid")
     if hum then
         hum.WalkSpeed = SpeedEnabled and SpeedValue or 16
+        hum.JumpPower = JumpEnabled and JumpValue or 50
     end
 end
 
@@ -48,7 +60,7 @@ local function UpdateESP()
                     if not ESPObjects[plr] then
                         local hl = Instance.new("Highlight")
                         hl.Adornee = char
-                        hl.FillColor = Color3.fromRGB(255, 50, 50)
+                        hl.FillColor = Color3.fromRGB(255, 50, 50) -- Rojo por defecto
                         hl.OutlineColor = Color3.fromRGB(255, 255, 255)
                         hl.FillTransparency = ESPFill
                         hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
@@ -71,27 +83,32 @@ end
 
 RunService.Heartbeat:Connect(UpdateESP)
 
--- Crear Ventana
+-- ═══════════════════════════════════════════════════════════════
+-- CREACIÓN DE UI (WINDUI MODIFICADO)
+-- ═══════════════════════════════════════════════════════════════
+
 Window = WindUI:CreateWindow({
     Title = "ASTRA HUB ZZ",
+    Icon = "zap",
     Theme = "Dark",
-    Size = UDim2.fromOffset(450, 400)
+    Size = UDim2.fromOffset(480, 420)
 })
 
--- Tags Decorativos
-Window:Tag({ Title = "AstraHub", Color = Color3.fromHex("#30ff6a") })
-Window:Tag({ Title = "v1.0 Test", Color = Color3.fromHex("#315dff") })
+-- Header Tags
+Window:Tag({ Title = "AstraHub ZZ", Color = Color3.fromHex("#30ff6a") })
+Window:Tag({ Title = "v1.0", Color = Color3.fromHex("#315dff") })
 Window:Tag({ Title = "by TzHzk", Color = Color3.fromHex("#888888") })
 
 -- Tabs
 local MainTab = Window:Tab({ Title = "Main", Icon = "home" })
 local PlayerTab = Window:Tab({ Title = "Player", Icon = "user" })
 local ESPTab = Window:Tab({ Title = "ESP", Icon = "eye" })
+local SettingsTab = Window:Tab({ Title = "Settings", Icon = "settings" })
 
 -- MAIN TAB
 MainTab:Paragraph({
-    Title = "✨ AstraHub ZZ",
-    Desc = "Testing Version\nStable • No Sliders • No Errors"
+    Title = "✨ Bienvenido a AstraHub ZZ",
+    Desc = "Hub optimizado por TzHzk\nSpeed • Jump • ESP\nSliders Verdes Personalizados"
 })
 MainTab:Divider()
 MainTab:Button({
@@ -103,52 +120,90 @@ MainTab:Button({
     end
 })
 
--- PLAYER TAB (Usando Botones en vez de Sliders)
+-- PLAYER TAB (CON SLIDERS VERDES)
 PlayerTab:Toggle({
     Title = "⚡ Speed Activado",
     Value = false,
     Callback = function(state)
         SpeedEnabled = state
         ApplySpeed()
-        WindUI:Notify({ Title = "Speed", Content = state and "ON" or "OFF", Duration = 1 })
     end
 })
 
-PlayerTab:Button({
-    Title = "Velocidad: " .. SpeedValue,
-    Callback = function(btn)
-        SpeedValue = SpeedValue + 5
-        if SpeedValue > 100 then SpeedValue = 16 end
-        btn:SetTitle("Velocidad: " .. SpeedValue)
+-- Slider de Velocidad (AHORA SERÁ VERDE GRACIAS A TU MODIFICACIÓN)
+PlayerTab:Slider({
+    Title = "Velocidad",
+    Value = { Min = 16, Max = 120, Default = 16 },
+    Callback = function(value)
+        SpeedValue = value
         if SpeedEnabled then ApplySpeed() end
-        WindUI:Notify({ Title = "Speed", Content = "Velocidad: " .. SpeedValue, Duration = 1 })
     end
 })
 
--- ESP TAB
+PlayerTab:Divider()
+
+PlayerTab:Toggle({
+    Title = "🦘 Jump Power Activado",
+    Value = false,
+    Callback = function(state)
+        JumpEnabled = state
+        ApplySpeed()
+    end
+})
+
+-- Slider de Salto (TAMBIÉN VERDE)
+PlayerTab:Slider({
+    Title = "Altura de Salto",
+    Value = { Min = 50, Max = 200, Default = 50 },
+    Callback = function(value)
+        JumpValue = value
+        if JumpEnabled then ApplySpeed() end
+    end
+})
+
+-- ESP TAB (CON SLIDER VERDE)
 ESPTab:Toggle({
     Title = "👁️ ESP Highlight",
     Value = false,
     Callback = function(state)
         ESPEnabled = state
-        WindUI:Notify({ Title = "ESP", Content = state and "ON" or "OFF", Duration = 1 })
     end
 })
 
-ESPTab:Button({
-    Title = "Opacidad: 50%",
-    Callback = function(btn)
-        if ESPFill == 0.5 then
-            ESPFill = 0.2
-            btn:SetTitle("Opacidad: 20%")
-        elseif ESPFill == 0.2 then
-            ESPFill = 0.8
-            btn:SetTitle("Opacidad: 80%")
-        else
-            ESPFill = 0.5
-            btn:SetTitle("Opacidad: 50%")
+-- Slider de Opacidad (TAMBIÉN VERDE)
+ESPTab:Slider({
+    Title = "Opacidad del ESP",
+    Value = { Min = 0, Max = 1, Default = 0.5 },
+    Increment = 0.1, -- Importante para sliders decimales
+    Callback = function(value)
+        ESPFill = value
+    end
+})
+
+-- SETTINGS TAB (KEYBIND)
+SettingsTab:Keybind({
+    Title = "Tecla Abrir/Cerrar",
+    Value = "K", -- Valor inicial como string
+    Callback = function(key)
+        -- WindUI devuelve el nombre de la tecla, lo convertimos a Enum
+        local success, enumKey = pcall(function()
+            return Enum.KeyCode[key]
+        end)
+        if success then
+            ToggleKey = enumKey
+            WindUI:Notify({ Title = "Keybind", Content = "Tecla cambiada a: " .. key, Duration = 2 })
         end
     end
 })
 
-print("✅ AstraHub ZZ Loaded Successfully")
+-- Keybind Global para abrir/cerrar
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == ToggleKey then
+        Window:Toggle()
+    end
+end)
+
+print("✅ AstraHub ZZ Cargado Correctamente")
+print("🟢 Sliders Verdes Activados")
+print("🔑 Usa la tecla K para abrir/cerrar")
