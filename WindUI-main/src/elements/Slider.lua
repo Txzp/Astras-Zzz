@@ -1,13 +1,11 @@
 local cloneref = (cloneref or clonereference or function(instance) return instance end)
 
-
 local UserInputService = cloneref(game:GetService("UserInputService"))
 local RunService = cloneref(game:GetService("RunService"))
 
 local Creator = require("../modules/Creator")
 local New = Creator.New
 local Tween = Creator.Tween
-
 
 local Element = {}
 
@@ -113,6 +111,9 @@ function Element:New(Config)
         ParentConfig = Config,
     })
     
+    -- ==========================================
+    -- CAMBIO DE COLOR AQUÍ: BARRA VERDE
+    -- ==========================================
     
     Slider.UIElements.SliderIcon = Creator.NewRoundFrame(99, "Squircle", {
         ImageTransparency = .95,
@@ -121,24 +122,24 @@ function Element:New(Config)
         Position = UDim2.new(0.5,0,0.5,0),
         Name = "Frame",
         ThemeTag = {
-            ImageColor3 = "Text",
+            ImageColor3 = "Text", -- El fondo sigue siendo del tema (gris oscuro/negro)
         },
     }, {
+        -- ESTA ES LA PARTE QUE SE LLENA (ANTES ERA AZUL POR "Slider")
         Creator.NewRoundFrame(99, "Squircle", {
             Name = "Frame",
             Size = UDim2.new(delta, 0, 1, 0),
             ImageTransparency = .1,
-            ThemeTag = {
-                ImageColor3 = "Slider",
-            },
+            -- CAMBIADO A VERDE NEÓN DIRECTO
+            ImageColor3 = Color3.fromRGB(0, 255, 106), 
         }, {
+            -- La bolita (Thumb)
             Creator.NewRoundFrame(99, "Squircle", {
                 Size = UDim2.new(0, Config.Window.NewElements and (Slider.ThumbSize*2) or (Slider.ThumbSize+2), 0, Config.Window.NewElements and (Slider.ThumbSize+4) or (Slider.ThumbSize+2)),
                 Position = UDim2.new(1, 0, 0.5, 0),
                 AnchorPoint = Vector2.new(0.5, 0.5),
-                ThemeTag = {
-                    ImageColor3 = "SliderThumb",
-                },
+                -- Bolita blanca para contraste
+                ImageColor3 = Color3.fromRGB(255, 255, 255),
                 Name = "Thumb",
             }, {
                 Creator.NewRoundFrame(99, "Glass-1", {
@@ -146,25 +147,15 @@ function Element:New(Config)
                     ImageColor3 = Color3.new(1,1,1),
                     Name = "Highlight",
                     ImageTransparency = .6,
-                }, {
-                    -- New("UIGradient", {
-                    --     Rotation = 60,
-                    --     Color = ColorSequence.new({
-                    --         ColorSequenceKeypoint.new(0.0, Color3.fromRGB(255, 255, 255)),
-                    --         ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 255)),
-                    --         ColorSequenceKeypoint.new(1.0, Color3.fromRGB(255, 255, 255)),
-                    --     }),
-                    --     Transparency = NumberSequence.new({
-                    --         NumberSequenceKeypoint.new(0.0, 0.1),
-                    --         NumberSequenceKeypoint.new(0.5, 1),
-                    --         NumberSequenceKeypoint.new(1.0, 0.1),
-                    --     })
-                    -- }),
                 }),
             })
         })
     })
     
+    -- ==========================================
+    -- FIN DEL CAMBIO DE COLOR
+    -- ==========================================
+
     Slider.UIElements.SliderContainer = New("Frame", {
         Size = UDim2.new(Slider.Title == nil and 1 or 0, Slider.Title == nil and 0 or Slider.Width, 0, 0),
         AutomaticSize = "Y",
@@ -221,7 +212,6 @@ function Element:New(Config)
         Slider:Lock()
     end
     
-    --local ScrollingFrameParent = Slider.SliderFrame.Parent:IsA("ScrollingFrame") and Slider.SliderFrame.Parent or Slider.SliderFrame.Parent.Parent.Parent
     local ScrollingFrameParent = Config.Tab.UIElements.ContainerFrame
     
     function Slider:Set(Value, input)
@@ -261,7 +251,6 @@ function Element:New(Config)
                         end
                     end)
                     
-                    -- release slider
                     releaseconnection = UserInputService.InputEnded:Connect(function(endInput)
                         if (endInput.UserInputType == Enum.UserInputType.MouseButton1 or endInput.UserInputType == Enum.UserInputType.Touch) and input == endInput then
                             moveconnection:Disconnect()
@@ -338,12 +327,10 @@ function Element:New(Config)
         Slider:Set(Value, input)
         
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            -- drag slider
             if Config.Window.NewElements then 
                 Tween(Slider.UIElements.SliderIcon.Frame.Thumb, .24, { ImageTransparency = .85, Size = UDim2.new(0,(Config.Window.NewElements and (Slider.ThumbSize*2) or (Slider.ThumbSize))+8,0,Slider.ThumbSize+8) }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             end
             if Tooltip then Tooltip:Open() end
-            --print("piskaa")
         end
     end)
     
