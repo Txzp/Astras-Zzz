@@ -1,33 +1,56 @@
--- ═══════════════════════════════════════════════════════════════
--- KEY SYSTEM
--- ═══════════════════════════════════════════════════════════════
+-- TEST FINAL: Dialog Personalizado AstraHub Zz
+print("🔄 Cargando WindUI Modificado desde GitHub...")
 
-local ValidKey = "Testing 2" -- <--- AQUÍ DEFINES TU CLAVE
-local KeyEntered = false
+local success, result = pcall(function()
+    -- Carga TU librería modificada desde GitHub
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
+end)
 
--- ... (código de la ventana de key) ...
+if not success then
+    print("❌ Error al cargar WindUI:")
+    print(result)
+    return
+end
 
-KeyTab:Input({
-    Title = "Clave de Acceso",
-    Placeholder = "Escribe tu clave aquí...",
-    Callback = function(key)
-        if key == ValidKey then -- <--- AQUÍ SE VERIFICA SI LA CLAVE ES CORRECTA
-            KeyEntered = true
-            WindUI:Notify({
-                Title = "✅ Éxito",
-                Content = "Clave correcta. Cargando hub...",
-                Duration = 2
-            })
-            task.wait(1)
-            KeyWindow:Destroy() -- Cierra la ventana de KeySystem
-            LoadMainHub() -- Carga el hub principal
-        else
-            WindUI:Notify({
-                Title = "❌ Error",
-                Content = "Clave incorrecta. Intenta de nuevo.",
-                Icon = "x",
-                Duration = 2
-            })
-        end
+print("✅ WindUI cargado correctamente.")
+
+-- Crear una ventana de prueba simple
+local Window = WindUI:CreateWindow({
+    Title = "TEST DIALOG",
+    Theme = "Dark",
+    Size = UDim2.fromOffset(400, 300)
+})
+
+local MainTab = Window:Tab({ Title = "Prueba", Icon = "home" })
+
+MainTab:Paragraph({
+    Title = "Prueba de Dialog de Cierre",
+    Desc = "Haz clic en la 'X' de arriba a la derecha para probar el Dialog personalizado."
+})
+
+MainTab:Button({
+    Title = "Forzar Dialog Manualmente",
+    Callback = function()
+        Window:Dialog({
+            Title = "Close | AstrasHub",
+            Content = "Are you sure you want to close the AstrasHub interface?",
+            Buttons = {
+                {
+                    Title = "Cancel",
+                    Variant = "Secondary",
+                    Callback = function() end
+                },
+                {
+                    Title = "Confirm",
+                    Variant = "Primary", 
+                    Color = Color3.fromRGB(255, 60, 60), -- Fuerza el color ROJO
+                    Callback = function()
+                        print("Confirmado manualmente")
+                    end
+                }
+            }
+        })
     end
 })
+
+print("🟢 Prueba lista. Haz clic en la X de la ventana.")
