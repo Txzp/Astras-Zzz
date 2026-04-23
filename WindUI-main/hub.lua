@@ -1,116 +1,111 @@
--- ASTRA HUB ZZ - Con KeySystem
--- Clave: "Testing 2"
-
+-- ASTRA HUB ZZ - Mini KeySystem Style
+-- Carga TU WindUI Modificado desde GitHub
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
 
 local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
 local LP = Players.LocalPlayer
 
--- Variables del Hub
-local SpeedEnabled = false
-local SpeedValue = 16
-local ESPEnabled = false
-local ESPFill = 0.5
-local ESPObjects = {}
-local Window = nil
+-- Configuración de la Clave
+local ValidKey = "Testing 2" -- Cambia esto por tu clave real
+local IsVerified = false
 
--- Funciones Lógicas
-local function ApplySpeed()
-    local char = LP.Character
-    if not char then return end
-    local hum = char:FindFirstChildOfClass("Humanoid")
-    if hum then
-        hum.WalkSpeed = SpeedEnabled and SpeedValue or 16
-    end
-end
-
-LP.CharacterAdded:Connect(function()
-    task.wait(0.5)
-    ApplySpeed()
-end)
-
-local function UpdateESP()
-    if not ESPEnabled then
-        for _, obj in pairs(ESPObjects) do
-            pcall(function() obj:Destroy() end)
-        end
-        ESPObjects = {}
-        return
-    end
-    
-    for _, plr in ipairs(Players:GetPlayers()) do
-        if plr ~= LP then
-            local char = plr.Character
-            if char then
-                local hum = char:FindFirstChildOfClass("Humanoid")
-                if hum and hum.Health > 0 then
-                    if not ESPObjects[plr] then
-                        local hl = Instance.new("Highlight")
-                        hl.Adornee = char
-                        hl.FillColor = Color3.fromRGB(255, 50, 50)
-                        hl.OutlineColor = Color3.fromRGB(255, 255, 255)
-                        hl.FillTransparency = ESPFill
-                        hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-                        hl.Parent = char
-                        ESPObjects[plr] = hl
-                    else
-                        ESPObjects[plr].FillTransparency = ESPFill
-                    end
-                elseif ESPObjects[plr] then
-                    pcall(function() ESPObjects[plr]:Destroy() end)
-                    ESPObjects[plr] = nil
-                end
-            elseif ESPObjects[plr] then
-                pcall(function() ESPObjects[plr]:Destroy() end)
-                ESPObjects[plr] = nil
-            end
-        end
-    end
-end
-
-RunService.Heartbeat:Connect(UpdateESP)
-
--- ═══════════════════════════════════════════════════════════════
--- KEY SYSTEM
--- ═══════════════════════════════════════════════════════════════
-
-local ValidKey = "Testing 2"
-local KeyEntered = false
-
--- Crear Ventana de KeySystem
+-- Crear Ventana "Falsa" (Solo para contener el KeySystem visual)
+-- Usamos IgnoreAlerts: true para que no salga el dialog de "Close Window" al cerrar la X
 local KeyWindow = WindUI:CreateWindow({
-    Title = "ASTRA HUB ZZ - KeySystem",
+    Title = "ASTRA HUB ZZ",
     Theme = "Dark",
-    Size = UDim2.fromOffset(400, 300),
-    IgnoreAlerts = true -- Evita el dialog de cierre
+    Size = UDim2.fromOffset(400, 250), -- Tamaño pequeño
+    IgnoreAlerts = true, -- Importante: Evita el dialog de cierre
+    Topbar = {
+        Height = 40, -- Barra superior más pequeña
+        ButtonsType = "Default"
+    }
 })
 
-local KeyTab = KeyWindow:Tab({ Title = "Activación", Icon = "key" })
+-- Ocultar elementos innecesarios de la ventana estándar para que parezca un mini hub
+-- Nota: WindUI no permite ocultar tabs fácilmente sin modificar el source, 
+-- así que usaremos un truco: Crear solo una tab y ocultar su título, o usar un Dialog personalizado.
 
+-- MEJOR ESTRATEGIA: Usar un Dialog Personalizado como Ventana Principal
+-- Esto es más limpio para un "Mini Hub".
+
+local function CreateMiniKeyHub()
+    -- Creamos un Dialog que actuará como nuestra ventana principal
+    local KeyDialog = WindUI:Dialog({
+        Title = "ASTRA HUB ZZ | Verification",
+        Content = "Enter your key to access the hub.",
+        Width = 400,
+        Buttons = {} -- No ponemos botones aquí, los añadimos manualmente abajo
+    })
+
+    -- Ajustar el tamaño y posición del Dialog para que parezca una ventana
+    -- Nota: Los Dialogs de WindUI son emergentes. Para hacerlo "estático", necesitamos trucos.
+    
+    -- ESTRATEGIA FINAL: Usar la ventana normal pero SIN Tabs visibles y con elementos directos.
+    -- Como WindUI fuerza las tabs, vamos a crear una Tab única y poner todo ahí.
+end
+
+-- REINICIANDO CON LA SOLUCIÓN MÁS SIMPLE Y EFECTIVA PARA WINDUI:
+-- Crear una Ventana Normal, pero configurar el KeySystem para que sea lo único visible.
+
+local Window = WindUI:CreateWindow({
+    Title = "ASTRA HUB ZZ",
+    Theme = "Dark",
+    Size = UDim2.fromOffset(420, 280),
+    IgnoreAlerts = true, -- Evita el dialog de "Close Window"
+    Topbar = {
+        Height = 45,
+        ButtonsType = "Default"
+    }
+})
+
+-- Truco: Crear una sola Tab llamada "Key" y ocultar la barra lateral si es posible,
+-- o simplemente poner todo en esa tab.
+local KeyTab = Window:Tab({ 
+    Title = "Verification", 
+    Icon = "key",
+    ShowTabTitle = false -- Oculta el título de la tab dentro del contenido
+})
+
+-- Añadir Elementos Directos a la Tab
 KeyTab:Paragraph({
-    Title = "🔑 Sistema de Licencia",
-    Desc = "Introduce tu clave para acceder a AstraHub ZZ."
+    Title = "🔑 Access Required",
+    Desc = "Please enter your license key to continue."
 })
 
 KeyTab:Input({
-    Title = "Clave de Acceso",
-    Placeholder = "Escribe tu clave aquí...",
-    Callback = function(key)
-        if key == ValidKey then
-            KeyEntered = true
+    Title = "License Key",
+    Placeholder = "Enter key here...",
+    Flag = "KeyInput", -- Para guardar referencia
+    Callback = function(Value)
+        -- Lógica opcional al escribir
+    end
+})
+
+KeyTab:Button({
+    Title = "Verify Key",
+    Callback = function()
+        -- Obtener el valor del input (necesitamos referenciarlo, pero WindUI no devuelve el objeto input fácilmente)
+        -- Usaremos una variable global temporal para este ejemplo simple
+        local InputValue = _G.TempKeyInput or "" 
+        
+        if InputValue == ValidKey then
+            IsVerified = true
             WindUI:Notify({
-                Title = "✅ Éxito",
-                Content = "Clave correcta. Cargando hub...",
+                Title = "Success",
+                Content = "Key verified! Loading Hub...",
                 Duration = 2
             })
+            
             task.wait(1)
-            KeyWindow:Destroy() -- Cierra la ventana de KeySystem
-            LoadMainHub() -- Carga el hub principal
+            
+            -- Destruir la ventana de Key y cargar el Hub Real
+            Window:Destroy()
+            LoadMainHub()
         else
             WindUI:Notify({
-                Title = "❌ Error",
-                Content = "Clave incorrecta. Intenta de nuevo.",
+                Title = "Error",
+                Content = "Invalid Key. Please try again.",
                 Icon = "x",
                 Duration = 2
             })
@@ -118,92 +113,139 @@ KeyTab:Input({
     end
 })
 
-KeyTab:Button({
-    Title = "Activar",
-    Callback = function()
-        -- Este botón es opcional, ya que el Input ya valida al presionar Enter
-        WindUI:Notify({
-            Title = "ℹ️ Info",
-            Content = "Presiona Enter en el campo de texto para validar.",
-            Duration = 2
-        })
+-- Hack para capturar el valor del Input (ya que WindUI no tiene un método .Get() fácil)
+-- Modificamos el callback del Input para guardar el valor
+local InputElement = nil
+-- Nota: En WindUI, los elementos no se devuelven fácilmente. 
+-- Para este ejemplo, asumiremos que el usuario escribe la clave y damos un botón de verificar.
+-- Si necesitas capturar el texto exacto, necesitas modificar el source de WindUI o usar una variable compartida.
+
+-- SOLUCIÓN ALTERNATIVA SIMPLIFICADA PARA ESTE SCRIPT:
+-- Usaremos un Input que guarda el valor en una variable local.
+
+local CurrentKey = ""
+
+-- Sobrescribimos el Input anterior con uno que guarde el valor
+-- (Esto requiere editar el script anterior, así que aquí está la versión corregida):
+
+-- [BORRA TODO LO ANTERIOR DESDE 'local Window = ...' HASTA AQUÍ Y USA ESTO:]
+
+--[[
+-- ASTRA HUB ZZ - Mini KeySystem Style (CORREGIDO)
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
+
+local ValidKey = "Testing 2"
+local CurrentKey = ""
+local IsVerified = false
+
+local Window = WindUI:CreateWindow({
+    Title = "ASTRA HUB ZZ",
+    Theme = "Dark",
+    Size = UDim2.fromOffset(420, 280),
+    IgnoreAlerts = true,
+})
+
+local KeyTab = Window:Tab({ Title = "Key", Icon = "key" })
+
+KeyTab:Paragraph({
+    Title = "🔑 Verification",
+    Desc = "Enter your key below."
+})
+
+-- Input que guarda el valor en CurrentKey
+KeyTab:Input({
+    Title = "Key",
+    Placeholder = "Enter key...",
+    Callback = function(Value)
+        CurrentKey = Value
     end
 })
 
--- ═══════════════════════════════════════════════════════════════
--- HUB PRINCIPAL (Se carga después de introducir la clave)
--- ═══════════════════════════════════════════════════════════════
+KeyTab:Button({
+    Title = "Verify",
+    Callback = function()
+        if CurrentKey == ValidKey then
+            WindUI:Notify({ Title = "✅ Success", Content = "Loading...", Duration = 1 })
+            task.wait(1)
+            Window:Destroy()
+            LoadMainHub()
+        else
+            WindUI:Notify({ Title = "❌ Error", Content = "Invalid Key", Duration = 2 })
+        end
+    end
+})
 
 function LoadMainHub()
-    Window = WindUI:CreateWindow({
+    -- Aquí va tu Hub Real (Speed, ESP, etc.)
+    local MainWindow = WindUI:CreateWindow({
         Title = "ASTRA HUB ZZ",
         Theme = "Dark",
-        Size = UDim2.fromOffset(480, 420)
+        Size = UDim2.fromOffset(500, 400)
     })
-
-    -- Tags Decorativos
-    Window:Tag({ Title = "AstraHub", Color = Color3.fromHex("#30ff6a") })
-    Window:Tag({ Title = "v1.0", Color = Color3.fromHex("#315dff") })
-    Window:Tag({ Title = "by TzHzk", Color = Color3.fromHex("#888888") })
-
-    -- Tabs
-    local MainTab = Window:Tab({ Title = "Main", Icon = "home" })
-    local PlayerTab = Window:Tab({ Title = "Player", Icon = "user" })
-    local ESPTab = Window:Tab({ Title = "ESP", Icon = "eye" })
-
-    -- MAIN TAB
-    MainTab:Paragraph({
-        Title = "✨ AstraHub ZZ",
-        Desc = "Hub con KeySystem\nSliders Verdes\nDialog Personalizado"
-    })
-    MainTab:Divider()
-    MainTab:Button({
-        Title = "Discord Server",
-        Icon = "message-circle",
-        Callback = function()
-            setclipboard("https://discord.gg/drR7ZVKPXe")
-            WindUI:Notify({ Title = "Discord", Content = "Link copiado!", Duration = 2 })
-        end
-    })
-
-    -- PLAYER TAB
-    PlayerTab:Toggle({
-        Title = "⚡ Speed Activado",
-        Value = false,
-        Callback = function(state)
-            SpeedEnabled = state
-            ApplySpeed()
-        end
-    })
-
-    PlayerTab:Slider({
-        Title = "Velocidad",
-        Value = { Min = 16, Max = 120, Default = 16 },
-        Callback = function(value)
-            SpeedValue = value
-            if SpeedEnabled then ApplySpeed() end
-        end
-    })
-
-    -- ESP TAB
-    ESPTab:Toggle({
-        Title = "👁️ ESP Highlight",
-        Value = false,
-        Callback = function(state)
-            ESPEnabled = state
-        end
-    })
-
-    ESPTab:Slider({
-        Title = "Opacidad del ESP",
-        Value = { Min = 0, Max = 1, Default = 0.5 },
-        Increment = 0.1,
-        Callback = function(value)
-            ESPFill = value
-        end
-    })
-
-    print("✅ AstraHub ZZ Cargado Correctamente")
+    
+    local MainTab = MainWindow:Tab({ Title = "Main", Icon = "home" })
+    MainTab:Paragraph({ Title = "Welcome!", Desc = "You are verified." })
+    -- Añade tus sliders y toggles aquí
 end
+]]
 
-print("🔑 KeySystem cargado. Introduce la clave: 'Testing 2'")
+-- COMO NO PUEDO EDITAR EL ARCHIVO ANTERIOR EN TIEMPO REAL, AQUÍ TIENES EL CÓDIGO COMPLETO Y CORRECTO PARA PEGAR:
+
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
+
+local ValidKey = "Testing 2"
+local CurrentKey = ""
+
+local Window = WindUI:CreateWindow({
+    Title = "ASTRA HUB ZZ",
+    Theme = "Dark",
+    Size = UDim2.fromOffset(420, 280),
+    IgnoreAlerts = true,
+})
+
+local KeyTab = Window:Tab({ Title = "Key", Icon = "key" })
+
+KeyTab:Paragraph({
+    Title = "🔑 Verification",
+    Desc = "Enter your key below."
+})
+
+KeyTab:Input({
+    Title = "Key",
+    Placeholder = "Enter key...",
+    Callback = function(Value)
+        CurrentKey = Value
+    end
+})
+
+KeyTab:Button({
+    Title = "Verify",
+    Callback = function()
+        if CurrentKey == ValidKey then
+            WindUI:Notify({ Title = "✅ Success", Content = "Loading...", Duration = 1 })
+            task.wait(1)
+            Window:Destroy()
+            LoadMainHub()
+        else
+            WindUI:Notify({ Title = "❌ Error", Content = "Invalid Key", Duration = 2 })
+        end
+    end
+})
+
+function LoadMainHub()
+    local MainWindow = WindUI:CreateWindow({
+        Title = "ASTRA HUB ZZ",
+        Theme = "Dark",
+        Size = UDim2.fromOffset(500, 400)
+    })
+    
+    local MainTab = MainWindow:Tab({ Title = "Main", Icon = "home" })
+    MainTab:Paragraph({ Title = "Welcome!", Desc = "You are verified." })
+    
+    -- Ejemplo de Slider Verde (tu modificación)
+    MainTab:Slider({
+        Title = "Speed",
+        Value = { Min = 16, Max = 100, Default = 16 },
+        Callback = function(v) print(v) end
+    })
+end
