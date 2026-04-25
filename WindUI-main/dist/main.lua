@@ -6877,8 +6877,9 @@ ae.NewRoundFrame(99,"Squircle",{
 Name="Frame",
 Size=UDim2.new(ar,0,1,0),
 ImageTransparency=.1,
--- CAMBIO AQUÍ: Eliminamos ThemeTag y ponemos ImageColor3 directo
-ImageColor3=Color3.fromRGB(0,255,106),
+ThemeTag={
+ImageColor3="Slider",
+},
 },{
 ae.NewRoundFrame(99,"Squircle",{
 Size=UDim2.new(0,ak.Window.NewElements and(al.ThumbSize*2)or(al.ThumbSize+2),0,ak.Window.NewElements and(al.ThumbSize+4)or(al.ThumbSize+2)),
@@ -13409,26 +13410,28 @@ if not au.IgnoreAlerts then
 F=true
 
 au:Dialog{
-    Title="Close | AstrasHub",
-    Content="Are you sure you want to close the AstrasHub interface?",
-    Buttons={
-        {
-            Title="Cancel",
-            Callback=function()
-                F=false
-            end,
-            Variant="Secondary",
-        },
-        {
-            Title="Confirm",
-            Callback=function()
-                F=false
-                au:Destroy()
-            end,
-            Variant="Primary",
-            Color=Color3.fromRGB(255,60,60), -- Rojo Brillante
-        },
-    },
+
+Title="Close Window",
+Content="Do you want to close this window? You will not be able to open it again.",
+Buttons={
+{
+Title="Cancel",
+
+Callback=function()
+F=false
+end,
+Variant="Secondary",
+},
+{
+Title="Close Window",
+
+Callback=function()
+F=false
+au:Destroy()
+end,
+Variant="Primary",
+},
+},
 }
 else
 au:Destroy()
