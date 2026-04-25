@@ -13410,28 +13410,26 @@ if not au.IgnoreAlerts then
 F=true
 
 au:Dialog{
-
-Title="Close Window",
-Content="Do you want to close this window? You will not be able to open it again.",
-Buttons={
-{
-Title="Cancel",
-
-Callback=function()
-F=false
-end,
-Variant="Secondary",
-},
-{
-Title="Close Window",
-
-Callback=function()
-F=false
-au:Destroy()
-end,
-Variant="Primary",
-},
-},
+    Title="Close | AstrasHub", -- Título personalizado
+    Content="Are you sure you want to close the AstrasHub interface?", -- Descripción personalizada
+    Buttons={
+        {
+            Title="Cancel",
+            Callback=function()
+                F=false
+            end,
+            Variant="Secondary", -- Botón Cancelar normal
+        },
+        {
+            Title="Confirm", -- Texto del botón cambiado
+            Callback=function()
+                F=false
+                au:Destroy()
+            end,
+            Variant="Primary", 
+            Color=Color3.fromRGB(255, 60, 60), -- Fuerza el color ROJO brillante
+        },
+    },
 }
 else
 au:Destroy()
