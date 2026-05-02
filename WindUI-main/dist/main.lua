@@ -6874,20 +6874,18 @@ ImageColor3="Text",
 },
 },{
 ae.NewRoundFrame(99,"Squircle",{
-Name="Frame",
+Name="Frame", -- BARRA DE PROGRESO
 Size=UDim2.new(ar,0,1,0),
 ImageTransparency=.1,
--- CAMBIO AQUÍ: Solo la barra de progreso es VERDE
+-- La barra se mantiene VERDE
 ImageColor3=Color3.fromRGB(0,255,106), 
 },{
 ae.NewRoundFrame(99,"Squircle",{
 Size=UDim2.new(0,ak.Window.NewElements and(al.ThumbSize*2)or(al.ThumbSize+2),0,ak.Window.NewElements and(al.ThumbSize+4)or(al.ThumbSize+2)),
 Position=UDim2.new(1,0,0.5,0),
 AnchorPoint=Vector2.new(0.5,0.5),
--- LA BOLITA SE MANTIENE IGUAL (Blanca por defecto o según tema)
-ThemeTag={
-ImageColor3="SliderThumb", 
-},
+-- CAMBIO AQUÍ: Forzamos la BOLITA a BLANCO PURO
+ImageColor3=Color3.fromRGB(255,255,255), 
 Name="Thumb",
 },{
 ae.NewRoundFrame(99,"Glass-1",{
