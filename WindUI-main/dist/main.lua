@@ -3661,33 +3661,26 @@ return function(aa,ab)
 return{
 Dark={
 Name="Dark",
-
 Accent=Color3.fromHex"#18181b",
 Dialog=Color3.fromHex"#161616",
 Outline=Color3.fromHex"#FFFFFF",
 Text=Color3.fromHex"#FFFFFF",
 Placeholder=Color3.fromHex"#7a7a7a",
 Background=Color3.fromHex"#101010",
-Button=Color3.fromHex"#52525b",
+Button=Color3.fromRGB(0, 120, 255), -- <--- CAMBIADO A AZUL
 Icon=Color3.fromHex"#a1a1aa",
-Toggle=Color3.fromHex"#33C759",
-Slider=Color3.fromHex"#0091FF",
-Checkbox=Color3.fromHex"#0091FF",
-
+Toggle=Color3.fromHex"#33C759", -- Este suele ser verde para toggles, déjalo así si quieres contraste
+Slider=Color3.fromRGB(0, 120, 255), -- <--- OPCIONAL: Cambiar slider a azul también
+Checkbox=Color3.fromRGB(0, 120, 255), -- <--- OPCIONAL: Cambiar checkbox a azul también
 PanelBackground=Color3.fromHex"#FFFFFF",
 PanelBackgroundTransparency=0.95,
-
 SliderIcon=Color3.fromHex"#908F95",
-Primary=Color3.fromHex"#0091FF",
-
-
+Primary=Color3.fromRGB(0, 120, 255), -- <--- CAMBIADO A AZUL
 LabelBackground=Color3.fromHex"#000000",
 LabelBackgroundTransparency=0.83,
-
 ElementBackground=Color3.fromHex"#2A2A2C",
 ElementBackgroundTransparency=0,
 },
-
 Light={
 Name="Light",
 
