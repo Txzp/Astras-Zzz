@@ -1,4 +1,4 @@
--- ASTRA HUB ZZ - Testing Completo (Sin Intro, Sin KeySystem)
+-- AstraHub Zz - Script Final Definitivo con Temas
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
 
 print("🔄 Iniciando AstraHub Zz...")
@@ -7,188 +7,237 @@ print("🔄 Iniciando AstraHub Zz...")
 -- CONFIGURACIÓN DE LA VENTANA
 -- ═══════════════════════════════════════════════════════════════
 local Window = WindUI:CreateWindow({
-    Title = "AstraHub Zz",
-    Theme = "Dark",
+    Title = "AstraHub Zz", -- Título del Hub
+    Theme = "Dark", -- Tema por defecto
     Size = UDim2.fromOffset(480, 420),
-    Folder = "AstraHubZZ",
-    IgnoreAlerts = false, -- IMPORTANTE: Debe ser FALSE para que el Dialog de cierre personalizado funcione
+    Folder = "AstraHubZz",
+    IgnoreAlerts = false, -- Para que funcione el Dialog de cierre personalizado
 })
 
 print("✅ Ventana cargada.")
 
 -- ═══════════════════════════════════════════════════════════════
--- TAB 1: MAIN (Bienvenida y Componentes Básicos)
+-- SERVICIOS Y VARIABLES GLOBALES
 -- ═══════════════════════════════════════════════════════════════
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local LocalPlayer = Players.LocalPlayer
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local Humanoid = Character:WaitForChild("Humanoid")
+local RootPart = Character:WaitForChild("HumanoidRootPart")
+local Camera = workspace.CurrentCamera
+
+-- Estados de Funciones
+local FlyEnabled = false
+local FlySpeed = 50
+local NoclipEnabled = false
+local SpeedEnabled = false
+local SpeedValue = 50
+local JumpEnabled = false
+local JumpPower = 50
+
+-- Variables para Fly
+local BodyVelocity = Instance.new("BodyVelocity")
+BodyVelocity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+BodyVelocity.Velocity = Vector3.new(0, 0, 0)
+BodyVelocity.Parent = RootPart
+
+local BodyGyro = Instance.new("BodyGyro")
+BodyGyro.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
+BodyGyro.D = 100
+BodyGyro.P = 10000
+BodyGyro.CFrame = RootPart.CFrame
+BodyGyro.Parent = RootPart
+
+-- ═══════════════════════════════════════════════════════════════
+-- LÓGICA DE MOVIMIENTO (FLY, NOCLIP, SPEED, JUMP) - CORREGIDA
+-- ═══════════════════════════════════════════════════════════════
+
+-- FUNCIÓN CENTRALIZADA PARA ACTUALIZAR ESTADÍSTICAS
+local function UpdateStats()
+    if Character and Humanoid then
+        -- Speed: Se fuerza constantemente si está activo
+        if SpeedEnabled then
+            Humanoid.WalkSpeed = SpeedValue
+        else
+            Humanoid.WalkSpeed = 16
+        end
+
+        -- Jump: Se fuerza constantemente si está activo
+        if JumpEnabled then
+            Humanoid.JumpPower = JumpPower
+        else
+            Humanoid.JumpPower = 50
+        end
+    end
+end
+
+-- FLY LOGIC
+RunService.RenderStepped:Connect(function()
+    if FlyEnabled and Character and RootPart then
+        local MoveDirection = Vector3.new(0, 0, 0)
+        
+        -- Controles WASD + Espacio/Shift
+        if UserInputService:IsKeyDown(Enum.KeyCode.W) then MoveDirection = MoveDirection + RootPart.CFrame.LookVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.S) then MoveDirection = MoveDirection - RootPart.CFrame.LookVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.A) then MoveDirection = MoveDirection - RootPart.CFrame.RightVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.D) then MoveDirection = MoveDirection + RootPart.CFrame.RightVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.Space) then MoveDirection = MoveDirection + Vector3.new(0, 1, 0) end
+        if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) or UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then 
+            MoveDirection = MoveDirection - Vector3.new(0, 1, 0) 
+        end
+        
+        if MoveDirection.Magnitude > 0 then
+            MoveDirection = MoveDirection.Unit * FlySpeed
+        end
+        
+        BodyVelocity.Velocity = MoveDirection
+        BodyGyro.CFrame = Camera.CFrame
+    else
+        BodyVelocity.Velocity = Vector3.new(0, 0, 0)
+    end
+end)
+
+-- NOCLIP LOGIC
+RunService.Stepped:Connect(function()
+    if NoclipEnabled and Character then
+        for _, Part in ipairs(Character:GetDescendants()) do
+            if Part:IsA("BasePart") and Part.CanCollide then
+                Part.CanCollide = false
+            end
+        end
+    end
+end)
+
+-- LOOP CONSTANTE PARA SPEED/JUMP (ANTI-RESET)
+RunService.Heartbeat:Connect(UpdateStats)
+
+-- DETECTAR CAMBIO DE PERSONAJE (RESPAWN)
+LocalPlayer.CharacterAdded:Connect(function(Char)
+    task.wait(0.5) -- Pequeño delay para asegurar carga
+    Character = Char
+    Humanoid = Char:WaitForChild("Humanoid")
+    RootPart = Char:WaitForChild("HumanoidRootPart")
+    
+    -- Re-parentear objetos de Fly
+    BodyVelocity.Parent = RootPart
+    BodyGyro.Parent = RootPart
+    
+    -- Re-aplicar estados inmediatamente
+    UpdateStats()
+end)
+
+-- ═══════════════════════════════════════════════════════════════
+-- INTERFAZ DE USUARIO (HUB) - SIN SECCIONES, TODO SUELTO
+-- ═══════════════════════════════════════════════════════════════
+
+-- TAB 1: MAIN (Bienvenida)
 local MainTab = Window:Tab({ Title = "Main", Icon = "home" })
 
--- Sección de Bienvenida
-local WelcomeSection = MainTab:Section({
-    Title = "Bienvenido",
-    Description = "Estado del sistema",
-    Collapsed = false
+MainTab:Paragraph({
+    Title = "Astras Hub Welcome - Steal in Peru",
+    Desc = "By - ᴄ++ | ʟᴀᴅɪɴɢ..."
 })
 
-WelcomeSection:Paragraph({
-    Title = "👋 Hola, " .. game.Players.LocalPlayer.DisplayName,
-    Desc = "Sistema cargado correctamente.\nModificaciones activas: Sliders Verdes, Dialog Rojo."
-})
+-- TAB 2: PLAYER & CHEAT (Todo suelto, sin secciones)
+local PlayerTab = Window:Tab({ Title = "Player & Cheat", Icon = "user" })
 
--- Sección de Controles Básicos
-local BasicSection = MainTab:Section({
-    Title = "Controles Básicos",
-    Description = "Botones, Toggles, Inputs",
-    Collapsed = false
-})
-
-BasicSection:Toggle({
-    Title = "Activar Función A",
+-- Fly
+PlayerTab:Toggle({
+    Title = "Activar Fly",
     Value = false,
     Callback = function(state)
-        print("Función A:", state)
+        FlyEnabled = state
     end
 })
 
-BasicSection:Button({
-    Title = "Probar Notificación",
-    Callback = function()
-        WindUI:Notify({
-            Title = "Éxito",
-            Content = "El hub funciona perfectamente.",
-            Duration = 2
-        })
-    end
-})
-
-BasicSection:Input({
-    Title = "Nombre de Usuario",
-    Placeholder = "Escribe tu nombre...",
+PlayerTab:Slider({
+    Title = "Velocidad Fly",
+    Value = { Min = 10, Max = 200, Default = 50 },
     Callback = function(value)
-        print("Input:", value)
+        FlySpeed = value
     end
 })
 
-BasicSection:Dropdown({
-    Title = "Selecciona Opción",
-    Values = {"Opción 1", "Opción 2", "Opción 3"},
-    Default = "Opción 1",
+-- Noclip
+PlayerTab:Toggle({
+    Title = "Activar Noclip",
+    Value = false,
+    Callback = function(state)
+        NoclipEnabled = state
+    end
+})
+
+-- Speed
+PlayerTab:Toggle({
+    Title = "Activar Speed",
+    Value = false,
+    Callback = function(state)
+        SpeedEnabled = state
+        UpdateStats() -- Forzar actualización inmediata
+    end
+})
+
+PlayerTab:Slider({
+    Title = "Velocidad Speed",
+    Value = { Min = 16, Max = 200, Default = 50 },
     Callback = function(value)
-        print("Dropdown:", value)
+        SpeedValue = value
+        -- SOLUCIÓN: Actualizar siempre que cambie el slider
+        if SpeedEnabled then UpdateStats() end
     end
 })
 
--- Sección de Sliders (Verdes por modificación en main.lua)
-local SliderSection = MainTab:Section({
-    Title = "Sliders (Verdes)",
-    Description = "Prueba de deslizadores",
-    Collapsed = true
-})
-
-SliderSection:Slider({
-    Title = "Velocidad (Verde)",
-    Value = { Min = 16, Max = 120, Default = 50 },
-    Callback = function(v) 
-        print("Speed:", v)
+-- Jump
+PlayerTab:Toggle({
+    Title = "Activar Jump",
+    Value = false,
+    Callback = function(state)
+        JumpEnabled = state
+        UpdateStats() -- Forzar actualización inmediata
     end
 })
 
-SliderSection:Slider({
-    Title = "Opacidad ESP (Verde)",
-    Value = { Min = 0, Max = 1, Default = 0.5 },
-    Increment = 0.1,
-    Callback = function(v)
-        print("ESP Opacity:", v)
+PlayerTab:Slider({
+    Title = "Altura Jump",
+    Value = { Min = 50, Max = 300, Default = 50 },
+    Callback = function(value)
+        JumpPower = value
+        -- SOLUCIÓN: Actualizar siempre que cambie el slider
+        if JumpEnabled then UpdateStats() end
     end
 })
 
--- ═══════════════════════════════════════════════════════════════
--- TAB 2: AVANZADO (Keybinds, Colorpickers, Code)
--- ═══════════════════════════════════════════════════════════════
-local AdvancedTab = Window:Tab({ Title = "Avanzado", Icon = "settings" })
+-- TAB 3: CONFIG (Keybind, Discord y TEMAS)
+local ConfigTab = Window:Tab({ Title = "Config", Icon = "settings" })
 
--- Sección de Keybinds
-local KeybindSection = AdvancedTab:Section({
-    Title = "Keybinds",
-    Description = "Teclas rápidas",
+-- Sección de Configuración Básica
+local BasicConfigSection = ConfigTab:Section({
+    Title = "Configuración Básica",
+    Description = "Teclas y Enlaces",
     Collapsed = false
 })
 
-KeybindSection:Keybind({
-    Title = "Tecla de Atajo",
-    Value = "Q", -- Tecla por defecto
+-- Keybind para abrir/cerrar el Hub
+BasicConfigSection:Keybind({
+    Title = "Tecla para Abrir/Cerrar Hub",
+    Value = "RightShift", -- Tecla por defecto
     Callback = function(key)
-        print("Keybind Presionado:", key)
+        -- SOLUCIÓN: Configurar la tecla real de WindUI
+        Window:SetToggleKey(key)
         WindUI:Notify({
-            Title = "Keybind",
-            Content = "Presionaste: " .. key,
-            Duration = 1
-        })
-    end
-})
-
--- Sección de Colorpickers
-local ColorSection = AdvancedTab:Section({
-    Title = "Colorpickers",
-    Description = "Selectores de color",
-    Collapsed = false
-})
-
-ColorSection:Colorpicker({
-    Title = "Color de ESP",
-    Default = Color3.fromRGB(255, 0, 0),
-    Callback = function(color)
-        print("Color Escogido:", color)
-    end
-})
-
-ColorSection:Colorpicker({
-    Title = "Color de Fondo",
-    Default = Color3.fromRGB(0, 0, 0),
-    Transparency = 0.5, -- Con transparencia
-    Callback = function(color, transparency)
-        print("Color:", color, "Transparency:", transparency)
-    end
-})
-
--- Sección de Código
-local CodeSection = AdvancedTab:Section({
-    Title = "Código",
-    Description = "Bloques de código",
-    Collapsed = true
-})
-
-CodeSection:Code({
-    Title = "Ejemplo Lua",
-    Code = [[
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
-print("Hola, " .. LocalPlayer.Name)
-    ]],
-    OnCopy = function()
-        WindUI:Notify({
-            Title = "Copiado",
-            Content = "Código copiado al portapapeles.",
+            Title = "Config",
+            Content = "Tecla cambiada a: " .. key,
             Duration = 2
         })
     end
 })
 
--- ═══════════════════════════════════════════════════════════════
--- TAB 3: INFO (Divisores, Espacios, Links)
--- ═══════════════════════════════════════════════════════════════
-local InfoTab = Window:Tab({ Title = "Info", Icon = "info" })
-
-InfoTab:Paragraph({
-    Title = "Información del Hub",
-    Desc = "Detalles técnicos y enlaces."
-})
-
-InfoTab:Divider() -- Línea divisoria
-
-InfoTab:Space() -- Espacio vacío
-
-InfoTab:Button({
+-- Link de Discord
+BasicConfigSection:Button({
     Title = "Copiar Discord",
+    Icon = "message-circle",
     Callback = function()
         setclipboard("https://discord.gg/drR7ZVKPXe")
         WindUI:Notify({
@@ -199,42 +248,15 @@ InfoTab:Button({
     end
 })
 
-InfoTab:Space()
-
-InfoTab:Button({
-    Title = "Copiar GitHub",
-    Callback = function()
-        setclipboard("https://github.com/Txzp/Astras-Zzz")
-        WindUI:Notify({
-            Title = "GitHub",
-            Content = "Link copiado al portapapeles.",
-            Duration = 2
-        })
-    end
-})
-
-InfoTab:Divider()
-
-InfoTab:Paragraph({
-    Title = "Créditos",
-    Desc = "Desarrollado por Tz-hzk\nUsando WindUI Library"
-})
-
-print("🟢 AstraHub Zz cargado completamente.")
-
--- ═══════════════════════════════════════════════════════════════
--- TAB 4: SETTINGS (Cambio de Tema)
--- ═══════════════════════════════════════════════════════════════
-local SettingsTab = Window:Tab({ Title = "Settings", Icon = "settings" })
-
-local ThemeSection = SettingsTab:Section({
+-- Sección de Apariencia (Temas)
+local AppearanceSection = ConfigTab:Section({
     Title = "Apariencia",
     Description = "Personaliza el look del hub",
     Collapsed = false
 })
 
 -- Dropdown para cambiar el tema
-ThemeSection:Dropdown({
+AppearanceSection:Dropdown({
     Title = "Seleccionar Tema",
     Values = {
         "Dark",       -- Negro/Gris oscuro (Por defecto)
@@ -261,7 +283,7 @@ ThemeSection:Dropdown({
 })
 
 -- Botón extra para alternar rápido entre Dark/Light (Opcional)
-ThemeSection:Button({
+AppearanceSection:Button({
     Title = "Alternar Dark/Light Rápido",
     Callback = function()
         local current = WindUI:GetCurrentTheme()
@@ -272,3 +294,10 @@ ThemeSection:Button({
         end
     end
 })
+
+ConfigTab:Paragraph({
+    Title = "Info",
+    Desc = "AstraHub Zz v1.0\nOptimized by ᴄ++ | ʟᴏᴀɪɴɢ..."
+})
+
+print("🟢 ᴄ++ | ʟᴀɴɢ... cargado completamente.")
