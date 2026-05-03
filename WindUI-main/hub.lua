@@ -1,46 +1,48 @@
--- ASTRA HUB ZZ - Testing Visual Completo (Sin Lógica de Juego)
+-- ASTRA HUB ZZ - Testing Completo de TODOS los Componentes
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
 
-print("🔄 Iniciando Testing Visual...")
+print("🔄 Iniciando Testing Completo...")
 
 -- ═══════════════════════════════════════════════════════════════
 -- CONFIGURACIÓN DE LA VENTANA
 -- ═══════════════════════════════════════════════════════════════
 local Window = WindUI:CreateWindow({
     Title = "AstraHub Zz",
-    Theme = "Dark", -- Tema por defecto (se puede cambiar en Settings)
+    Theme = "Dark", -- Tema por defecto
     Size = UDim2.fromOffset(480, 420),
     Folder = "AstraHubZZ",
-    IgnoreAlerts = false, -- Para que funcione el Dialog de cierre personalizado
+    IgnoreAlerts = false, -- Para que funcione el Dialog de cierre personalizado (Rojo)
 })
 
 print("✅ Ventana cargada.")
 
 -- ═══════════════════════════════════════════════════════════════
--- TAB 1: MAIN (Bienvenida y Componentes Básicos)
+-- TAB 1: MAIN (Componentes Básicos)
 -- ═══════════════════════════════════════════════════════════════
 local MainTab = Window:Tab({ Title = "Main", Icon = "home" })
 
--- Sección de Bienvenida
-local WelcomeSection = MainTab:Section({
-    Title = "Bienvenido",
-    Description = "Estado del sistema",
-    Collapsed = false
+-- 1. Paragraph
+MainTab:Paragraph({
+    Title = "👋 Bienvenido al Testing",
+    Desc = "Este hub prueba todos los componentes de WindUI.\nSliders Verdes, Dialog Rojo, Temas."
 })
 
-WelcomeSection:Paragraph({
-    Title = "👋 Hola, " .. game.Players.LocalPlayer.DisplayName,
-    Desc = "Sistema de testing cargado.\nModificaciones activas: Sliders Verdes, Dialog Rojo."
+MainTab:Divider() -- Línea divisoria
+
+-- 2. Button
+MainTab:Button({
+    Title = "Probar Notificación",
+    Callback = function()
+        WindUI:Notify({
+            Title = "Éxito",
+            Content = "El botón funciona correctamente.",
+            Duration = 2
+        })
+    end
 })
 
--- Sección de Controles Básicos
-local BasicSection = MainTab:Section({
-    Title = "Controles Básicos",
-    Description = "Botones, Toggles, Inputs",
-    Collapsed = false
-})
-
-BasicSection:Toggle({
+-- 3. Toggle
+MainTab:Toggle({
     Title = "Activar Función A",
     Value = false,
     Callback = function(state)
@@ -48,18 +50,17 @@ BasicSection:Toggle({
     end
 })
 
-BasicSection:Button({
-    Title = "Probar Notificación",
-    Callback = function()
-        WindUI:Notify({
-            Title = "Éxito",
-            Content = "El hub funciona perfectamente.",
-            Duration = 2
-        })
+-- 4. Slider (Verde por modificación en main.lua)
+MainTab:Slider({
+    Title = "Velocidad (Verde)",
+    Value = { Min = 16, Max = 120, Default = 50 },
+    Callback = function(v) 
+        print("Speed:", v)
     end
 })
 
-BasicSection:Input({
+-- 5. Input
+MainTab:Input({
     Title = "Nombre de Usuario",
     Placeholder = "Escribe tu nombre...",
     Callback = function(value)
@@ -67,7 +68,8 @@ BasicSection:Input({
     end
 })
 
-BasicSection:Dropdown({
+-- 6. Dropdown
+MainTab:Dropdown({
     Title = "Selecciona Opción",
     Values = {"Opción 1", "Opción 2", "Opción 3"},
     Default = "Opción 1",
@@ -76,43 +78,13 @@ BasicSection:Dropdown({
     end
 })
 
--- Sección de Sliders (Verdes por modificación en main.lua)
-local SliderSection = MainTab:Section({
-    Title = "Sliders (Verdes)",
-    Description = "Prueba de deslizadores",
-    Collapsed = true
-})
-
-SliderSection:Slider({
-    Title = "Velocidad (Verde)",
-    Value = { Min = 16, Max = 120, Default = 50 },
-    Callback = function(v) 
-        print("Speed:", v)
-    end
-})
-
-SliderSection:Slider({
-    Title = "Opacidad ESP (Verde)",
-    Value = { Min = 0, Max = 1, Default = 0.5 },
-    Increment = 0.1,
-    Callback = function(v)
-        print("ESP Opacity:", v)
-    end
-})
-
 -- ═══════════════════════════════════════════════════════════════
 -- TAB 2: AVANZADO (Keybinds, Colorpickers, Code)
 -- ═══════════════════════════════════════════════════════════════
 local AdvancedTab = Window:Tab({ Title = "Avanzado", Icon = "settings" })
 
--- Sección de Keybinds
-local KeybindSection = AdvancedTab:Section({
-    Title = "Keybinds",
-    Description = "Teclas rápidas",
-    Collapsed = false
-})
-
-KeybindSection:Keybind({
+-- 7. Keybind
+AdvancedTab:Keybind({
     Title = "Tecla de Atajo",
     Value = "Q", -- Tecla por defecto
     Callback = function(key)
@@ -125,14 +97,8 @@ KeybindSection:Keybind({
     end
 })
 
--- Sección de Colorpickers
-local ColorSection = AdvancedTab:Section({
-    Title = "Colorpickers",
-    Description = "Selectores de color",
-    Collapsed = false
-})
-
-ColorSection:Colorpicker({
+-- 8. Colorpicker
+AdvancedTab:Colorpicker({
     Title = "Color de ESP",
     Default = Color3.fromRGB(255, 0, 0),
     Callback = function(color)
@@ -140,23 +106,8 @@ ColorSection:Colorpicker({
     end
 })
 
-ColorSection:Colorpicker({
-    Title = "Color de Fondo",
-    Default = Color3.fromRGB(0, 0, 0),
-    Transparency = 0.5, -- Con transparencia
-    Callback = function(color, transparency)
-        print("Color:", color, "Transparency:", transparency)
-    end
-})
-
--- Sección de Código
-local CodeSection = AdvancedTab:Section({
-    Title = "Código",
-    Description = "Bloques de código",
-    Collapsed = true
-})
-
-CodeSection:Code({
+-- 9. Code Block
+AdvancedTab:Code({
     Title = "Ejemplo Lua",
     Code = [[
 local Players = game:GetService("Players")
@@ -174,21 +125,54 @@ print("Hola, " .. LocalPlayer.Name)
 })
 
 -- ═══════════════════════════════════════════════════════════════
--- TAB 3: SETTINGS (Temas y Config)
+-- TAB 3: VISUAL (Images, Groups, Spaces)
+-- ═══════════════════════════════════════════════════════════════
+local VisualTab = Window:Tab({ Title = "Visual", Icon = "image" })
+
+-- 10. Image
+VisualTab:Image({
+    Image = "rbxassetid://1234567890", -- ID de imagen de ejemplo
+    AspectRatio = "16:9",
+    Radius = 12
+})
+
+VisualTab:Space() -- Espacio vacío
+
+-- 11. Group (Horizontal)
+VisualTab:Group({
+    VisualTab:Button({
+        Title = "Botón 1",
+        Callback = function() print("Btn 1") end
+    }),
+    VisualTab:Button({
+        Title = "Botón 2",
+        Callback = function() print("Btn 2") end
+    }),
+})
+
+-- 12. Section (Desplegable)
+local MySection = VisualTab:Section({
+    Title = "Sección Desplegable",
+    Description = "Haz clic para expandir",
+    Opened = false
+})
+
+MySection:Toggle({
+    Title = "Toggle dentro de Sección",
+    Value = false,
+    Callback = function(state) print("Section Toggle:", state) end
+})
+
+-- ═══════════════════════════════════════════════════════════════
+-- TAB 4: SETTINGS (Temas y Config)
 -- ═══════════════════════════════════════════════════════════════
 local SettingsTab = Window:Tab({ Title = "Settings", Icon = "info" })
 
-local SettingsSection = SettingsTab:Section({
-    Title = "Apariencia",
-    Description = "Personaliza el look del hub",
-    Collapsed = false
-})
-
--- Dropdown para cambiar el tema
-SettingsSection:Dropdown({
+-- 13. Theme Selector
+SettingsTab:Dropdown({
     Title = "Seleccionar Tema",
     Values = {
-        "Dark",       -- Negro/Gris oscuro (Por defecto)
+        "Dark",       -- Negro/Gris oscuro
         "Light",      -- Blanco/Gris claro
         "Red",        -- Rojo oscuro
         "Sky",        -- Azul cielo
@@ -200,9 +184,7 @@ SettingsSection:Dropdown({
     },
     Default = "Dark",
     Callback = function(value)
-        -- Esta función cambia el tema globalmente
         WindUI:SetTheme(value)
-        
         WindUI:Notify({
             Title = "Tema Cambiado",
             Content = "El tema ahora es: " .. value,
@@ -211,41 +193,27 @@ SettingsSection:Dropdown({
     end
 })
 
--- Botón extra para alternar rápido entre Dark/Light (Opcional)
-SettingsSection:Button({
-    Title = "Alternar Dark/Light Rápido",
+-- 14. Dialog Test (Para probar el Dialog Rojo al cerrar)
+SettingsTab:Button({
+    Title = "Probar Dialog Personalizado",
     Callback = function()
-        local current = WindUI:GetCurrentTheme()
-        if current == "Dark" then
-            WindUI:SetTheme("Light")
-        else
-            WindUI:SetTheme("Dark")
-        end
-    end
-})
-
--- Sección de Links
-local LinksSection = SettingsTab:Section({
-    Title = "Links",
-    Description = "Recursos útiles",
-    Collapsed = true
-})
-
-LinksSection:Button({
-    Title = "Copiar Discord",
-    Callback = function()
-        setclipboard("https://discord.gg/drR7ZVKPXe")
-        WindUI:Notify({
-            Title = "Discord",
-            Content = "Link copiado al portapapeles.",
-            Duration = 2
+        WindUI:Popup({
+            Title = "Dialog de Prueba",
+            Content = "Este es un dialog de prueba. Al cerrar la ventana principal, verás el Dialog Rojo personalizado.",
+            Buttons = {
+                {
+                    Title = "Cerrar",
+                    Variant = "Primary",
+                    Callback = function() end
+                }
+            }
         })
     end
 })
 
-LinksSection:Paragraph({
-    Title = "Créditos",
-    Desc = "Desarrollado por Tz-hzk\nUsando WindUI Library"
+SettingsTab:Paragraph({
+    Title = "Info Final",
+    Desc = "Testing Completo Finalizado.\nTodos los componentes están presentes."
 })
 
-print("🟢 Testing Visual cargado completamente.")
+print("🟢 Testing Completo cargado completamente.")
