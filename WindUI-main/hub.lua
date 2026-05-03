@@ -221,3 +221,54 @@ InfoTab:Paragraph({
 })
 
 print("🟢 AstraHub Zz cargado completamente.")
+
+-- ═══════════════════════════════════════════════════════════════
+-- TAB 4: SETTINGS (Cambio de Tema)
+-- ═══════════════════════════════════════════════════════════════
+local SettingsTab = Window:Tab({ Title = "Settings", Icon = "settings" })
+
+local ThemeSection = SettingsTab:Section({
+    Title = "Apariencia",
+    Description = "Personaliza el look del hub",
+    Collapsed = false
+})
+
+-- Dropdown para cambiar el tema
+ThemeSection:Dropdown({
+    Title = "Seleccionar Tema",
+    Values = {
+        "Dark",       -- Negro/Gris oscuro (Por defecto)
+        "Light",      -- Blanco/Gris claro
+        "Red",        -- Rojo oscuro
+        "Sky",        -- Azul cielo
+        "Violet",     -- Morado
+        "Amber",      -- Ámbar/Dorado
+        "Emerald",    -- Verde esmeralda
+        "Midnight",   -- Azul medianoche
+        "Rainbow"     -- Arcoíris animado
+    },
+    Default = "Dark",
+    Callback = function(value)
+        -- Esta función cambia el tema globalmente
+        WindUI:SetTheme(value)
+        
+        WindUI:Notify({
+            Title = "Tema Cambiado",
+            Content = "El tema ahora es: " .. value,
+            Duration = 2
+        })
+    end
+})
+
+-- Botón extra para alternar rápido entre Dark/Light (Opcional)
+ThemeSection:Button({
+    Title = "Alternar Dark/Light Rápido",
+    Callback = function()
+        local current = WindUI:GetCurrentTheme()
+        if current == "Dark" then
+            WindUI:SetTheme("Light")
+        else
+            WindUI:SetTheme("Dark")
+        end
+    end
+})
