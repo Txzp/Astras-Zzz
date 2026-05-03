@@ -1,4 +1,4 @@
--- AstraHub Zz - Script con Consola de Logs para Debugging
+-- AstraHub Zz - Script con Consola de Logs Funcional
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
@@ -19,17 +19,28 @@ local Window = WindUI:CreateWindow({
 print("✅ Ventana cargada.")
 
 -- ═══════════════════════════════════════════════════════════════
--- CONSOLA DE LOGS VISUAL (Para ver errores reales)
+-- CONSOLA DE LOGS VISUAL (Funcional)
 -- ═══════════════════════════════════════════════════════════════
 local DebugTab = Window:Tab({ Title = "Debug Console", Icon = "terminal" })
 
-local LogFrame = DebugTab:Section({
-    Title = "System Logs",
-    Description = "Monitor de eventos en tiempo real",
-    Collapsed = false
-})
+-- Creamos un ScrollingFrame manual para los logs
+local LogContainer = Instance.new("ScrollingFrame")
+LogContainer.Size = UDim2.new(1, 0, 1, 0)
+LogContainer.BackgroundTransparency = 1
+LogContainer.ScrollBarThickness = 4
+LogContainer.ScrollBarImageColor3 = Color3.fromRGB(50, 50, 50)
+LogContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
+LogContainer.AutomaticCanvasSize = Enum.AutomaticSize.Y
+LogContainer.ClipsDescendants = true
+LogContainer.Parent = DebugTab.ContainerFrame -- Añadimos directamente al contenedor de la tab
 
--- Función para agregar logs a la UI
+-- Layout para organizar los logs verticalmente
+local LogLayout = Instance.new("UIListLayout")
+LogLayout.Padding = UDim.new(0, 4)
+LogLayout.SortOrder = Enum.SortOrder.LayoutOrder
+LogLayout.Parent = LogContainer
+
+-- Función para agregar logs a la consola visual
 local function AddLog(message, type)
     local color = Color3.fromRGB(255, 255, 255)
     if type == "ERROR" then color = Color3.fromRGB(255, 50, 50) end
@@ -38,24 +49,31 @@ local function AddLog(message, type)
     
     print("[" .. type .. "] " .. message) -- También imprime en la consola F9
     
-    -- Creamos un Label temporal en la sección
+    -- Creamos un Label para el log
     local LogLabel = Instance.new("TextLabel")
-    LogLabel.Size = UDim2.new(1, 0, 0, 20)
-    LogLabel.BackgroundTransparency = 1
+    LogLabel.Size = UDim2.new(1, -10, 0, 20) -- Un poco de margen horizontal
+    LogLabel.BackgroundTransparency = 0.8
+    LogLabel.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     LogLabel.Text = "[" .. os.date("%H:%M:%S") .. "] " .. message
     LogLabel.TextColor3 = color
     LogLabel.TextSize = 14
     LogLabel.Font = Enum.Font.Code
     LogLabel.TextXAlignment = "Left"
-    LogLabel.Parent = LogFrame.ElementFrame.Content -- Añadimos al contenido de la sección
+    LogLabel.TextYAlignment = "Center"
+    LogLabel.BorderSizePixel = 0
+    LogLabel.Parent = LogContainer
     
-    -- Auto-scroll simple (opcional, requiere ajustar CanvasPosition si es ScrollingFrame)
+    -- Auto-scroll al final
+    task.spawn(function()
+        task.wait()
+        LogContainer.CanvasPosition = Vector2.new(0, LogContainer.AbsoluteCanvasSize.Y)
+    end)
 end
 
 AddLog("Consola de Debug iniciada...", "SUCCESS")
 
 -- ═══════════════════════════════════════════════════════════════
--- MONITOREO DE TECLAS (RAW INPUT)
+-- MONITOREO DE TECLAS (RAW INPUT) PARA DEBUGGING
 -- ═══════════════════════════════════════════════════════════════
 
 -- Monitoreamos TODAS las teclas presionadas para ver si Roblox las detecta
