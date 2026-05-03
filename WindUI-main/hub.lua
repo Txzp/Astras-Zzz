@@ -1,21 +1,18 @@
--- ᴄ++ | ʟᴏᴅɪɴɢ... - Script Final Optimizado (CORREGIDO)
+-- ᴄ++ | ʟᴏᴅɪɴɢ... - Script Final Optimizado y Corregido
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
 
-print("🔄 Iniciando ᴄ++ | ʟᴏᴀɪɴɢ...")
+print("🔄 Iniciando ᴄ++ | ʟᴏɪɴɢ...")
 
 -- ═══════════════════════════════════════════════════════════════
 -- CONFIGURACIÓN DE LA VENTANA
 -- ═══════════════════════════════════════════════════════════════
 local Window = WindUI:CreateWindow({
-    Title = "AstraHub Zz",
+    Title = "AstraHub Zz", -- Título del Hub
     Theme = "Dark",
     Size = UDim2.fromOffset(480, 420),
     Folder = "CppLoading",
-    IgnoreAlerts = false,
+    IgnoreAlerts = false, -- Para que funcione el Dialog de cierre personalizado
 })
-
--- 🔧 CORRECCIÓN 1: Configurar tecla por defecto para abrir/cerrar
-Window:SetToggleKey("RightShift")
 
 print("✅ Ventana cargada.")
 
@@ -44,24 +41,17 @@ local JumpPower = 50
 local BodyVelocity = Instance.new("BodyVelocity")
 BodyVelocity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
 BodyVelocity.Velocity = Vector3.new(0, 0, 0)
+BodyVelocity.Parent = RootPart
 
 local BodyGyro = Instance.new("BodyGyro")
 BodyGyro.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
 BodyGyro.D = 100
 BodyGyro.P = 10000
 BodyGyro.CFrame = RootPart.CFrame
-
--- Función para re-parentear fly al respawn
-local function AttachFlyParts()
-    if RootPart and BodyVelocity and BodyGyro then
-        BodyVelocity.Parent = RootPart
-        BodyGyro.Parent = RootPart
-    end
-end
-AttachFlyParts()
+BodyGyro.Parent = RootPart
 
 -- ═══════════════════════════════════════════════════════════════
--- LÓGICA DE MOVIMIENTO
+-- LÓGICA DE MOVIMIENTO (FLY, NOCLIP, SPEED, JUMP)
 -- ═══════════════════════════════════════════════════════════════
 
 -- FLY LOGIC
@@ -69,6 +59,7 @@ RunService.RenderStepped:Connect(function()
     if FlyEnabled and Character and RootPart then
         local MoveDirection = Vector3.new(0, 0, 0)
         
+        -- Controles WASD + Espacio/Shift
         if UserInputService:IsKeyDown(Enum.KeyCode.W) then MoveDirection = MoveDirection + RootPart.CFrame.LookVector end
         if UserInputService:IsKeyDown(Enum.KeyCode.S) then MoveDirection = MoveDirection - RootPart.CFrame.LookVector end
         if UserInputService:IsKeyDown(Enum.KeyCode.A) then MoveDirection = MoveDirection - RootPart.CFrame.RightVector end
@@ -85,7 +76,7 @@ RunService.RenderStepped:Connect(function()
         BodyVelocity.Velocity = MoveDirection
         BodyGyro.CFrame = Camera.CFrame
     else
-        if BodyVelocity then BodyVelocity.Velocity = Vector3.new(0, 0, 0) end
+        BodyVelocity.Velocity = Vector3.new(0, 0, 0)
     end
 end)
 
@@ -100,46 +91,48 @@ RunService.Stepped:Connect(function()
     end
 end)
 
--- 🔧 CORRECCIÓN 2 y 3: SPEED & JUMP (bien aplicados)
+-- FUNCIÓN DE ACTUALIZACIÓN CENTRALIZADA (SOLUCIÓN PARA SPEED/JUMP)
 local function UpdateStats()
-    if not Character or not Humanoid then return end
-    
-    -- Speed: solo si está encendido
-    if SpeedEnabled then
-        Humanoid.WalkSpeed = SpeedValue
-    else
-        Humanoid.WalkSpeed = 16
-    end
-    
-    -- Jump: solo si está encendido
-    if JumpEnabled then
-        Humanoid.JumpPower = JumpPower
-    else
-        Humanoid.JumpPower = 50
+    if Character and Humanoid then
+        -- Speed: Se aplica constantemente si está activo
+        if SpeedEnabled then
+            Humanoid.WalkSpeed = SpeedValue
+        else
+            Humanoid.WalkSpeed = 16
+        end
+
+        -- Jump: Se aplica constantemente si está activo
+        if JumpEnabled then
+            Humanoid.JumpPower = JumpPower
+        else
+            Humanoid.JumpPower = 50
+        end
     end
 end
 
--- Actualizar cuando cambie el personaje (respawn)
+-- Loop constante para asegurar que los valores se mantengan (Anti-Reset)
+RunService.Heartbeat:Connect(UpdateStats)
+
+-- Recargar variables al cambiar de personaje (Anti-Respawn Bug)
 LocalPlayer.CharacterAdded:Connect(function(Char)
-    task.wait(0.5)
+    task.wait(0.5) -- Pequeño delay para asegurar carga
     Character = Char
     Humanoid = Char:WaitForChild("Humanoid")
     RootPart = Char:WaitForChild("HumanoidRootPart")
     
+    -- Re-parentear objetos de Fly
     BodyVelocity.Parent = RootPart
     BodyGyro.Parent = RootPart
     
-    -- Reaplicar estados después del respawn
+    -- Re-aplicar estados inmediatamente
     UpdateStats()
 end)
 
--- Loop constante para mantener los valores
-RunService.Heartbeat:Connect(UpdateStats)
-
 -- ═══════════════════════════════════════════════════════════════
--- INTERFAZ DE USUARIO
+-- INTERFAZ DE USUARIO (HUB) - SIN SECCIONES, TODO SUELTO
 -- ═══════════════════════════════════════════════════════════════
 
+-- TAB 1: MAIN (Bienvenida)
 local MainTab = Window:Tab({ Title = "Main", Icon = "home" })
 
 MainTab:Paragraph({
@@ -147,6 +140,7 @@ MainTab:Paragraph({
     Desc = "By - ᴄ++ | ʟᴏᴀɪɴɢ..."
 })
 
+-- TAB 2: PLAYER & CHEAT (Todo suelto, sin secciones)
 local PlayerTab = Window:Tab({ Title = "Player & Cheat", Icon = "user" })
 
 -- Fly
@@ -155,9 +149,6 @@ PlayerTab:Toggle({
     Value = false,
     Callback = function(state)
         FlyEnabled = state
-        if not state and BodyVelocity then
-            BodyVelocity.Velocity = Vector3.new(0, 0, 0)
-        end
     end
 })
 
@@ -178,13 +169,13 @@ PlayerTab:Toggle({
     end
 })
 
--- 🔧 Speed CORREGIDO
+-- Speed
 PlayerTab:Toggle({
     Title = "Activar Speed",
     Value = false,
     Callback = function(state)
         SpeedEnabled = state
-        UpdateStats()
+        UpdateStats() -- Forzar actualización inmediata
     end
 })
 
@@ -193,17 +184,18 @@ PlayerTab:Slider({
     Value = { Min = 16, Max = 200, Default = 50 },
     Callback = function(value)
         SpeedValue = value
-        if SpeedEnabled then UpdateStats() end  -- ← clave: si está activo, actualiza
+        -- SOLUCIÓN: Actualizar siempre que cambie el slider, no solo al activar
+        if SpeedEnabled then UpdateStats() end
     end
 })
 
--- 🔧 Jump CORREGIDO
+-- Jump
 PlayerTab:Toggle({
     Title = "Activar Jump",
     Value = false,
     Callback = function(state)
         JumpEnabled = state
-        UpdateStats()
+        UpdateStats() -- Forzar actualización inmediata
     end
 })
 
@@ -212,18 +204,20 @@ PlayerTab:Slider({
     Value = { Min = 50, Max = 300, Default = 50 },
     Callback = function(value)
         JumpPower = value
-        if JumpEnabled then UpdateStats() end  -- ← clave: si está activo, actualiza
+        -- SOLUCIÓN: Actualizar siempre que cambie el slider
+        if JumpEnabled then UpdateStats() end
     end
 })
 
--- TAB CONFIG
+-- TAB 3: CONFIG (Keybind y Discord)
 local ConfigTab = Window:Tab({ Title = "Config", Icon = "settings" })
 
--- 🔧 CORRECCIÓN 1: Keybind funcional
+-- Keybind para abrir/cerrar el Hub (SOLUCIÓN COMPLETA)
 ConfigTab:Keybind({
     Title = "Tecla para Abrir/Cerrar Hub",
-    Value = "RightShift",
+    Value = "RightShift", -- Tecla por defecto
     Callback = function(key)
+        -- SOLUCIÓN: Configurar la tecla real de WindUI
         Window:SetToggleKey(key)
         WindUI:Notify({
             Title = "Config",
@@ -233,6 +227,7 @@ ConfigTab:Keybind({
     end
 })
 
+-- Link de Discord
 ConfigTab:Button({
     Title = "Copiar Discord",
     Icon = "message-circle",
@@ -248,7 +243,7 @@ ConfigTab:Button({
 
 ConfigTab:Paragraph({
     Title = "Info",
-    Desc = "AstraHub Zz v1.1 CORREGIDO\nSpeed/Jump solo si están ON\nKeybind funcional"
+    Desc = "AstraHub Zz v1.0\nOptimized by ᴄ++ | ʟᴏɪɴɢ..."
 })
 
-print("🟢 ᴄ++ | ᴄᴏʀʀᴇɢɪᴅᴏ - Todo funcionando correctamente.")
+print("🟢 ᴄ++ | ʟᴀɴɢ... cargado completamente.")
