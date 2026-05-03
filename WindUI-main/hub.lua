@@ -1,4 +1,4 @@
--- AstraHub Zz - Script Final con Fix de Frames
+-- AstraHub Zz - Script Final con Fix de Transparencia de Frames
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
 
 print("🔄 Iniciando AstraHub Zz...")
@@ -22,7 +22,7 @@ print("✅ Ventana cargada.")
 local MainTab = Window:Tab({ Title = "Main", Icon = "home" })
 
 MainTab:Paragraph({
-    Title = "Astras Hub Welcome - Steal in Peru",
+    Title = "Astras Hub Welcome",
     Desc = "By - ᴄ++ | ʟᴏᴀɴɢ..."
 })
 
@@ -74,7 +74,7 @@ PlayerTab:Slider({
 })
 
 -- ═══════════════════════════════════════════════════════════════
--- TAB 3: SETTINGS (Temas, Config y Transparencia)
+-- TAB 3: SETTINGS (Temas, Config y Transparencias)
 -- ═══════════════════════════════════════════════════════════════
 local SettingsTab = Window:Tab({ Title = "Settings", Icon = "settings" })
 
@@ -150,14 +150,14 @@ AppearanceSection:Button({
     end
 })
 
--- Sección de Transparencia
+-- Sección de Transparencias
 local TransparencySection = SettingsTab:Section({
-    Title = "Transparencia",
-    Description = "Ajusta la opacidad de la ventana",
+    Title = "Transparencias",
+    Description = "Ajusta la opacidad del Hub y los Frames",
     Collapsed = false
 })
 
--- Slider para controlar la transparencia del Hub
+-- Slider para controlar la transparencia general del Hub
 TransparencySection:Slider({
     Title = "Opacidad del Hub (%)",
     Value = { Min = 10, Max = 100, Default = 100 },
@@ -180,36 +180,40 @@ TransparencySection:Slider({
     end
 })
 
-SettingsTab:Paragraph({
-    Title = "Info",
-    Desc = "AstraHub Zz v1.0\nOptimized by ᴄ++ | ʟᴏɪɴɢ..."
+-- NUEVO: Slider para controlar la transparencia de los FRAMES internos
+TransparencySection:Slider({
+    Title = "Opacidad de Frames (%)",
+    Value = { Min = 0, Max = 100, Default = 100 }, -- 100% = Opaco, 0% = Invisible
+    Callback = function(value)
+        local frameTransparency = 1 - (value / 100)
+        
+        -- Recorrer todos los elementos creados y ajustar la transparencia de sus fondos
+        -- Nota: Esto es una aproximación, ya que WindUI maneja los temas internamente.
+        -- La forma más efectiva es ajustar la propiedad 'ElementBackgroundTransparency' del tema actual si es posible,
+        -- pero como estamos en runtime, iteraremos sobre los objetos conocidos si es necesario.
+        -- Sin embargo, WindUI no expone fácilmente una función global para esto sin modificar el core.
+        
+        -- SOLUCIÓN ALTERNATIVA: Ajustar la transparencia de los contenedores principales de las Tabs
+        if Window and Window.TabModule and Window.TabModule.Containers then
+            for _, container in pairs(Window.TabModule.Containers) do
+                -- El fondo de los elementos suele estar en los hijos de los contenedores
+                -- Buscamos los frames que tienen la clase de fondo de elemento
+                for _, child in pairs(container:GetDescendants()) do
+                    if child:IsA("ImageLabel") and child.Name == "Frame" or child.Name == "Background" then
+                        -- Ajustamos la transparencia manualmente
+                        child.ImageTransparency = math.clamp(child.ImageTransparency + (frameTransparency * 0.5), 0, 1)
+                    end
+                end
+            end
+        end
+        
+        print("Transparencia de Frames:", value .. "%")
+    end
 })
 
--- ═══════════════════════════════════════════════════════════════
--- FIX DE FRAMES: Ajustar tamaño de contenedores para evitar huecos
--- ═══════════════════════════════════════════════════════════════
-task.spawn(function()
-    task.wait(1) -- Esperar a que todo cargue
-    
-    -- Forzar el tamaño correcto de los contenedores principales
-    if Window and Window.UIElements then
-        -- Ajustar el contenedor de la barra lateral
-        if Window.UIElements.SideBarContainer then
-            Window.UIElements.SideBarContainer.Size = UDim2.new(0, 200, 1, -52) -- Altura fija menos topbar
-        end
-        
-        -- Ajustar el contenedor principal de contenido
-        if Window.UIElements.MainBar then
-            Window.UIElements.MainBar.Size = UDim2.new(1, -200, 1, -52) -- Ancho total menos sidebar, altura menos topbar
-        end
-        
-        -- Ajustar el fondo principal para que cubra todo
-        if Window.UIElements.Main and Window.UIElements.Main.Background then
-            Window.UIElements.Main.Background.Size = UDim2.new(1, 0, 1, 0)
-        end
-    end
-    
-    print("🟢 Frames ajustados correctamente.")
-end)
+SettingsTab:Paragraph({
+    Title = "Info",
+    Desc = "AstraHub Zz v1.0\nOptimized by ᴄ++ | ʟᴏɴɢ..."
+})
 
 print("🟢 AstraHub Zz cargado completamente.")
