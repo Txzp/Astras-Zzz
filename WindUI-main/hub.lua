@@ -1,10 +1,10 @@
--- ASTRA HUB ZZ - Intro Visual Final (Con Stroke Negro y Subtítulo Alejado)
+-- ASTRA HUB ZZ - Intro Visual Final (Stroke 1.5 Negro + Blanco)
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
 -- ═══════════════════════════════════════════════════════════════
--- 1. INTRO VISUAL FINAL (Stroke Negro + Subtítulo Alejado)
+-- 1. INTRO VISUAL FINAL (Stroke 1.5 Negro + Texto Blanco)
 -- ═══════════════════════════════════════════════════════════════
 
 -- Crear Pantalla de Carga
@@ -13,38 +13,45 @@ IntroGui.Name = "AstraIntroFinal"
 IntroGui.Parent = game.CoreGui
 IntroGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- Texto Principal (Grande, Elegante y con Borde Negro)
+-- Texto Principal (Grande, Blanco, Stroke 1.5 Negro)
 local IntroText = Instance.new("TextLabel")
 IntroText.Size = UDim2.new(0, 700, 0, 120) -- Grande
 IntroText.Position = UDim2.new(0.5, -350, 0.5, -60) -- Centrado
 IntroText.BackgroundTransparency = 1 -- Sin fondo
 IntroText.Text = "ASTRAS HUB ZZ"
-IntroText.TextColor3 = Color3.fromRGB(255, 255, 255) -- Blanco
+IntroText.TextColor3 = Color3.fromRGB(255, 255, 255) -- <--- CAMBIO: Blanco Puro
 IntroText.TextSize = 90 -- Muy grande
 IntroText.Font = Enum.Font.GothamBold
-IntroText.TextStrokeTransparency = 0 -- <--- CAMBIO: Stroke totalmente visible
-IntroText.TextStrokeColor3 = Color3.fromRGB(0, 0, 0) -- <--- CAMBIO: Color Negro
+IntroText.TextStrokeTransparency = 0 -- Stroke visible
+IntroText.TextStrokeColor3 = Color3.fromRGB(0, 0, 0) -- Negro
 IntroText.Parent = IntroGui
 
--- Agregar UIStroke explícito para asegurar el grosor de 2
-local TextStroke = Instance.new("UIStroke")
-TextStroke.Thickness = 2 -- <--- CAMBIO: Grosor de 2 píxeles
-TextStroke.Color = Color3.fromRGB(0, 0, 0) -- Negro
-TextStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-TextStroke.Parent = IntroText
+-- Agregar UIStroke explícito para asegurar el grosor de 1.5
+local TextStrokeMain = Instance.new("UIStroke")
+TextStrokeMain.Thickness = 1.5 -- <--- CAMBIO: Grosor de 1.5 píxeles
+TextStrokeMain.Color = Color3.fromRGB(0, 0, 0) -- Negro
+TextStrokeMain.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+TextStrokeMain.Parent = IntroText
 
--- Subtítulo Pequeño (Más Abajo y Visible)
+-- Subtítulo Pequeño (Blanco, Stroke 1.5 Negro, Más Abajo)
 local SubText = Instance.new("TextLabel")
 SubText.Size = UDim2.new(0, 300, 0, 30)
-SubText.Position = UDim2.new(0.5, -150, 0.5, 80) -- <--- CAMBIO: Bajado a Y=80 (más separado)
+SubText.Position = UDim2.new(0.5, -150, 0.5, 80) -- Bajado a Y=80 (más separado)
 SubText.BackgroundTransparency = 1 -- Sin fondo
 SubText.Text = "by Tz-hzk | v1.0"
-SubText.TextColor3 = Color3.fromRGB(220, 220, 220) -- Gris claro
+SubText.TextColor3 = Color3.fromRGB(255, 255, 255) -- <--- CAMBIO: Blanco Puro
 SubText.TextSize = 26
 SubText.Font = Enum.Font.GothamMedium
-SubText.TextStrokeTransparency = 0.8 -- Borde suave
-SubText.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+SubText.TextStrokeTransparency = 0 -- Stroke visible
+SubText.TextStrokeColor3 = Color3.fromRGB(0, 0, 0) -- Negro
 SubText.Parent = IntroGui
+
+-- Agregar UIStroke explícito para el subtítulo también
+local TextStrokeSub = Instance.new("UIStroke")
+TextStrokeSub.Thickness = 1.5 -- <--- CAMBIO: Grosor de 1.5 píxeles
+TextStrokeSub.Color = Color3.fromRGB(0, 0, 0) -- Negro
+TextStrokeSub.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+TextStrokeSub.Parent = SubText
 
 -- Animación Controlada
 task.spawn(function()
@@ -68,7 +75,7 @@ task.spawn(function()
     
     -- Aparecer Subtítulo con un poco de retraso
     task.wait(0.1)
-    TweenService:Create(SubText, TweenInfoIn, { TextTransparency = 0.2 }):Play()
+    TweenService:Create(SubText, TweenInfoIn, { TextTransparency = 0 }):Play() -- <--- CAMBIO: Totalmente opaco
 
     -- 4. Tiempo de Lectura (Mantener visible)
     task.wait(1.2) -- Se queda visible 1.2 segundos
