@@ -1,154 +1,91 @@
--- ASTRA HUB ZZ - Script Completo (Sin KeySystem)
--- Carga TU WindUI Modificado desde GitHub
+-- ASTRA HUB ZZ - Con Intro Visual
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local LocalPlayer = Players.LocalPlayer
+
+-- ═══════════════════════════════════════════════════════════════
+-- 1. INTRO VISUAL (Aparece antes del Hub)
+-- ═══════════════════════════════════════════════════════════════
+
+-- Crear Pantalla de Carga
+local IntroGui = Instance.new("ScreenGui")
+IntroGui.Name = "AstraIntro"
+IntroGui.Parent = game.CoreGui
+IntroGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+local IntroFrame = Instance.new("Frame")
+IntroFrame.Size = UDim2.new(1, 0, 1, 0)
+IntroFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Fondo Negro
+IntroFrame.BorderSizePixel = 0
+IntroFrame.Parent = IntroGui
+
+local IntroText = Instance.new("TextLabel")
+IntroText.Size = UDim2.new(0, 300, 0, 50)
+IntroText.Position = UDim2.new(0.5, -150, 0.5, -25)
+IntroText.BackgroundTransparency = 1
+IntroText.Text = "ASTRAS HUB ZZ"
+IntroText.TextColor3 = Color3.fromRGB(255, 255, 255)
+IntroText.TextSize = 40
+IntroText.Font = Enum.Font.GothamBold
+IntroText.Parent = IntroFrame
+
+-- Animación de Desvanecimiento (Fade Out)
+task.spawn(function()
+    task.wait(2.5) -- Tiempo que dura la intro visible
+    
+    -- Desvanecer Texto
+    local TweenInfoText = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local GoalText = { TextTransparency = 1 }
+    local TweenText = TweenService:Create(IntroText, TweenInfoText, GoalText)
+    TweenText:Play()
+    
+    -- Desvanecer Fondo
+    local TweenInfoBg = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local GoalBg = { BackgroundTransparency = 1 }
+    local TweenBg = TweenService:Create(IntroFrame, TweenInfoBg, GoalBg)
+    TweenBg:Play()
+    
+    -- Destruir GUI después de la animación
+    task.wait(0.6)
+    IntroGui:Destroy()
+end)
+
+-- ═══════════════════════════════════════════════════════════════
+-- 2. CARGAR WINDUI Y CREAR EL HUB
+-- ═══════════════════════════════════════════════════════════════
+
+-- Pequeña pausa para asegurar que la intro se vea bien antes de cargar la librería
+task.wait(0.5)
+
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
 
 print("🔄 Iniciando AstraHub Zz...")
 
--- ═══════════════════════════════════════════════════════════════
--- CONFIGURACIÓN DE LA VENTANA (SIN KEYSYSTEM)
--- ═══════════════════════════════════════════════════════════════
 local Window = WindUI:CreateWindow({
     Title = "ASTRA HUB ZZ",
     Theme = "Dark",
     Size = UDim2.fromOffset(480, 420),
     Folder = "AstraHubZZ",
-    IgnoreAlerts = false, -- IMPORTANTE: Debe ser FALSE para que el Dialog de cierre funcione
+    IgnoreAlerts = true, -- Usa nuestro Dialog personalizado
 })
 
-print("✅ Ventana cargada. Interfaz lista.")
+print("✅ Ventana cargada.")
 
 -- ═══════════════════════════════════════════════════════════════
--- TAB PRINCIPAL (Usamos Secciones para organizar todo aquí)
+-- 3. CONTENIDO DEL HUB (Ejemplo Básico)
 -- ═══════════════════════════════════════════════════════════════
+
 local MainTab = Window:Tab({ Title = "Main", Icon = "home" })
 
--- Sección 1: Bienvenida
-local WelcomeSection = MainTab:Section({
+MainTab:Paragraph({
     Title = "Bienvenido",
-    Description = "Estado del sistema",
-    Collapsed = false -- Empieza abierta
+    Desc = "La intro ha terminado. El Hub está listo."
 })
 
-WelcomeSection:Paragraph({
-    Title = "👋 Hola, " .. game.Players.LocalPlayer.DisplayName,
-    Desc = "Sistema cargado correctamente.\nModificaciones activas: Sliders Verdes, Dialog Rojo, Keybinds."
-})
-
--- Sección 2: Prueba de Sliders (DEBEN SER VERDES por tu modificación en main.lua)
-local SliderSection = MainTab:Section({
-    Title = "Prueba de Sliders",
-    Description = "Verifica el color verde neón",
-    Collapsed = false
-})
-
-SliderSection:Slider({
-    Title = "Velocidad (Verde)",
-    Value = { Min = 16, Max = 120, Default = 50 },
-    Callback = function(v) 
-        print("Speed:", v)
-    end
-})
-
-SliderSection:Slider({
-    Title = "Opacidad ESP (Verde)",
-    Value = { Min = 0, Max = 1, Default = 0.5 },
-    Increment = 0.1,
-    Callback = function(v)
-        print("ESP Opacity:", v)
-    end
-})
-
--- Sección 3: Controles Variados (Toggles, Buttons, Dropdowns, Inputs, Keybinds)
-local ControlSection = MainTab:Section({
-    Title = "Controles Completos",
-    Description = "Todos los elementos UI",
-    Collapsed = false -- Dejamos esta abierta para probar todo
-})
-
--- Toggle
-ControlSection:Toggle({
-    Title = "Activar Función A",
-    Value = false,
-    Callback = function(state)
-        print("Función A:", state)
-    end
-})
-
--- Button
-ControlSection:Button({
-    Title = "Probar Notificación",
+MainTab:Button({
+    Title = "Probar Botón",
     Callback = function()
-        WindUI:Notify({
-            Title = "Éxito",
-            Content = "El hub funciona perfectamente.",
-            Duration = 2
-        })
-    end
-})
-
--- Input
-ControlSection:Input({
-    Title = "Nombre de Usuario",
-    Placeholder = "Escribe tu nombre...",
-    Callback = function(value)
-        print("Input:", value)
-    end
-})
-
--- Dropdown
-ControlSection:Dropdown({
-    Title = "Selecciona Opción",
-    Values = {"Opción 1", "Opción 2", "Opción 3"},
-    Default = "Opción 1",
-    Callback = function(value)
-        print("Dropdown:", value)
-    end
-})
-
--- Keybind (Tecla Rápida)
-ControlSection:Keybind({
-    Title = "Tecla de Atajo",
-    Value = "Q", -- Tecla por defecto
-    Callback = function(key)
-        print("Keybind Presionado:", key)
-        WindUI:Notify({
-            Title = "Keybind",
-            Content = "Presionaste: " .. key,
-            Duration = 1
-        })
-    end
-})
-
--- Colorpicker
-ControlSection:Colorpicker({
-    Title = "Color de ESP",
-    Default = Color3.fromRGB(255, 0, 0),
-    Callback = function(color)
-        print("Color Escogido:", color)
-    end
-})
-
--- Sección 4: Info y Links
-local InfoSection = MainTab:Section({
-    Title = "Info & Links",
-    Description = "Recursos útiles",
-    Collapsed = true
-})
-
-InfoSection:Paragraph({
-    Title = "Modificaciones Activas",
-    Desc = "✅ Slider Verde Neón\n✅ Dialog de Cierre Personalizado (Rojo)\n✅ Diseño Minimalista\n✅ Todos los Componentes"
-})
-
-InfoSection:Button({
-    Title = "Copiar Discord",
-    Callback = function()
-        setclipboard("https://discord.gg/drR7ZVKPXe")
-        WindUI:Notify({
-            Title = "Discord",
-            Content = "Link copiado al portapapeles.",
-            Duration = 2
-        })
+        print("Botón presionado")
     end
 })
 
