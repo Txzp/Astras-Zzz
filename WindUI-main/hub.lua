@@ -1,4 +1,4 @@
--- AstraHub Zz - Script Final con Fix de Transparencia de Frames
+-- AstraHub Zz - Script Final con Fix REAL de Transparencia de Frames
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
 
 print("🔄 Iniciando AstraHub Zz...")
@@ -17,7 +17,7 @@ local Window = WindUI:CreateWindow({
 print("✅ Ventana cargada.")
 
 -- ═══════════════════════════════════════════════════════════════
--- TAB 1: MAIN (Bienvenida)
+-- TAB 1: MAIN
 -- ═══════════════════════════════════════════════════════════════
 local MainTab = Window:Tab({ Title = "Main", Icon = "home" })
 
@@ -74,7 +74,7 @@ PlayerTab:Slider({
 })
 
 -- ═══════════════════════════════════════════════════════════════
--- TAB 3: SETTINGS (Temas, Config y Transparencias)
+-- TAB 3: SETTINGS (Temas, Config y Transparencias REALES)
 -- ═══════════════════════════════════════════════════════════════
 local SettingsTab = Window:Tab({ Title = "Settings", Icon = "settings" })
 
@@ -157,7 +157,7 @@ local TransparencySection = SettingsTab:Section({
     Collapsed = false
 })
 
--- Slider para controlar la transparencia general del Hub
+-- Slider para controlar la transparencia general del Hub (Fondo Principal)
 TransparencySection:Slider({
     Title = "Opacidad del Hub (%)",
     Value = { Min = 10, Max = 100, Default = 100 },
@@ -180,34 +180,38 @@ TransparencySection:Slider({
     end
 })
 
--- NUEVO: Slider para controlar la transparencia de los FRAMES internos
+-- NUEVO: Slider para controlar la transparencia de los FRAMES internos (REAL)
 TransparencySection:Slider({
-    Title = "Opacidad de Frames (%)",
+    Title = "Opacidad de Frames Internos (%)",
     Value = { Min = 0, Max = 100, Default = 100 }, -- 100% = Opaco, 0% = Invisible
     Callback = function(value)
         local frameTransparency = 1 - (value / 100)
         
-        -- Recorrer todos los elementos creados y ajustar la transparencia de sus fondos
-        -- Nota: Esto es una aproximación, ya que WindUI maneja los temas internamente.
-        -- La forma más efectiva es ajustar la propiedad 'ElementBackgroundTransparency' del tema actual si es posible,
-        -- pero como estamos en runtime, iteraremos sobre los objetos conocidos si es necesario.
-        -- Sin embargo, WindUI no expone fácilmente una función global para esto sin modificar el core.
-        
-        -- SOLUCIÓN ALTERNATIVA: Ajustar la transparencia de los contenedores principales de las Tabs
-        if Window and Window.TabModule and Window.TabModule.Containers then
-            for _, container in pairs(Window.TabModule.Containers) do
-                -- El fondo de los elementos suele estar en los hijos de los contenedores
-                -- Buscamos los frames que tienen la clase de fondo de elemento
-                for _, child in pairs(container:GetDescendants()) do
-                    if child:IsA("ImageLabel") and child.Name == "Frame" or child.Name == "Background" then
-                        -- Ajustamos la transparencia manualmente
-                        child.ImageTransparency = math.clamp(child.ImageTransparency + (frameTransparency * 0.5), 0, 1)
+        -- Recorrer todos los elementos creados en todas las tabs
+        for _, tab in pairs(Window.TabModule.Tabs) do
+            if tab.Elements then
+                for _, element in pairs(tab.Elements) do
+                    -- Buscar el frame principal del elemento (usualmente llamado "Main" o similar)
+                    if element.ElementFrame then
+                        -- WindUI usa ImageLabels con nombre "Frame" o "Main" para los fondos de los elementos
+                        local mainFrame = element.ElementFrame:FindFirstChild("Main") or element.ElementFrame:FindFirstChild("Frame")
+                        
+                        if mainFrame and mainFrame:IsA("ImageLabel") then
+                            -- Ajustar la transparencia del fondo del elemento
+                            mainFrame.ImageTransparency = math.clamp(frameTransparency, 0, 1)
+                        end
+                        
+                        -- También ajustar el borde si existe (Outline)
+                        local outline = element.ElementFrame:FindFirstChild("Outline")
+                        if outline and outline:IsA("ImageLabel") then
+                            outline.ImageTransparency = math.clamp(frameTransparency + 0.2, 0, 1) -- Un poco más visible para mantener definición
+                        end
                     end
                 end
             end
         end
         
-        print("Transparencia de Frames:", value .. "%")
+        print("Transparencia de Frames Internos:", value .. "%")
     end
 })
 
