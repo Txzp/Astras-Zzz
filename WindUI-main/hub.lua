@@ -1,7 +1,20 @@
--- AstraHub Zz - Script Final Optimizado
+-- ᴄ++ | ʟᴏᴅɪɴɢ... - Script Final Optimizado
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
 
-print("🔄 Iniciando AstraHub Zz...")
+print("🔄 Iniciando ᴄ++ | ʟᴏᴀɪɴɢ...")
+
+-- ═══════════════════════════════════════════════════════════════
+-- CONFIGURACIÓN DE LA VENTANA
+-- ═══════════════════════════════════════════════════════════════
+local Window = WindUI:CreateWindow({
+    Title = "AstraHub Zz", -- Título del Hub
+    Theme = "Dark",
+    Size = UDim2.fromOffset(480, 420),
+    Folder = "CppLoading",
+    IgnoreAlerts = false, -- Para que funcione el Dialog de cierre personalizado
+})
+
+print("✅ Ventana cargada.")
 
 -- ═══════════════════════════════════════════════════════════════
 -- SERVICIOS Y VARIABLES GLOBALES
@@ -78,8 +91,8 @@ RunService.Stepped:Connect(function()
     end
 end)
 
--- SPEED & JUMP LOGIC
-RunService.Heartbeat:Connect(function()
+-- SPEED & JUMP LOGIC (Corregida para funcionar inmediatamente)
+local function UpdateStats()
     if Character and Humanoid then
         -- Speed
         if SpeedEnabled then
@@ -95,10 +108,11 @@ RunService.Heartbeat:Connect(function()
             Humanoid.JumpPower = 50
         end
     end
-end)
+end
 
--- Recargar variables al cambiar de personaje
+-- Conectar a CharacterAdded para asegurar que funcione al respawnear
 LocalPlayer.CharacterAdded:Connect(function(Char)
+    task.wait(0.5) -- Pequeño delay para asegurar carga
     Character = Char
     Humanoid = Char:WaitForChild("Humanoid")
     RootPart = Char:WaitForChild("HumanoidRootPart")
@@ -108,48 +122,29 @@ LocalPlayer.CharacterAdded:Connect(function(Char)
     BodyGyro.Parent = RootPart
     
     -- Re-aplicar estados si están activos
-    if SpeedEnabled then Humanoid.WalkSpeed = SpeedValue end
-    if JumpEnabled then Humanoid.JumpPower = JumpPower end
+    UpdateStats()
 end)
 
--- ═══════════════════════════════════════════════════════════════
--- INTERFAZ DE USUARIO (HUB)
--- ═══════════════════════════════════════════════════════════════
-
-local Window = WindUI:CreateWindow({
-    Title = "AstraHub Zz", -- Título del Hub
-    Theme = "Dark",
-    Size = UDim2.fromOffset(480, 420),
-    Folder = "AstraHubZz",
-    IgnoreAlerts = false, -- Para que funcione el Dialog de cierre personalizado
-})
-
-print("✅ Ventana cargada.")
+-- Loop constante para asegurar que los valores se mantengan
+RunService.Heartbeat:Connect(UpdateStats)
 
 -- ═══════════════════════════════════════════════════════════════
+-- INTERFAZ DE USUARIO (HUB) - SIN SECCIONES, TODO SUELTO
+-- ═══════════════════════════════════════════════════════════════
+
 -- TAB 1: MAIN (Bienvenida)
--- ═══════════════════════════════════════════════════════════════
 local MainTab = Window:Tab({ Title = "Main", Icon = "home" })
 
 MainTab:Paragraph({
     Title = "Astras Hub Welcome - Steal in Peru",
-    Desc = "By - ᴄ++ | ʟᴏᴀᴅɪɴɢ..."
+    Desc = "By - ᴄ++ | ʟᴏᴀɪɴɢ..."
 })
 
--- ═══════════════════════════════════════════════════════════════
--- TAB 2: PLAYER & CHEAT
--- ═══════════════════════════════════════════════════════════════
+-- TAB 2: PLAYER & CHEAT (Todo suelto, sin secciones)
 local PlayerTab = Window:Tab({ Title = "Player & Cheat", Icon = "user" })
 
--- Sección Movimiento
-local MoveSection = PlayerTab:Section({
-    Title = "Movement",
-    Description = "Fly, Speed, Jump, Noclip",
-    Collapsed = false
-})
-
 -- Fly
-MoveSection:Toggle({
+PlayerTab:Toggle({
     Title = "Activar Fly",
     Value = false,
     Callback = function(state)
@@ -157,7 +152,7 @@ MoveSection:Toggle({
     end
 })
 
-MoveSection:Slider({
+PlayerTab:Slider({
     Title = "Velocidad Fly",
     Value = { Min = 10, Max = 200, Default = 50 },
     Callback = function(value)
@@ -166,7 +161,7 @@ MoveSection:Slider({
 })
 
 -- Noclip
-MoveSection:Toggle({
+PlayerTab:Toggle({
     Title = "Activar Noclip",
     Value = false,
     Callback = function(state)
@@ -175,65 +170,64 @@ MoveSection:Toggle({
 })
 
 -- Speed
-MoveSection:Toggle({
+PlayerTab:Toggle({
     Title = "Activar Speed",
     Value = false,
     Callback = function(state)
         SpeedEnabled = state
+        UpdateStats() -- Forzar actualización inmediata
     end
 })
 
-MoveSection:Slider({
+PlayerTab:Slider({
     Title = "Velocidad Speed",
     Value = { Min = 16, Max = 200, Default = 50 },
     Callback = function(value)
         SpeedValue = value
+        if SpeedEnabled then UpdateStats() end
     end
 })
 
 -- Jump
-MoveSection:Toggle({
+PlayerTab:Toggle({
     Title = "Activar Jump",
     Value = false,
     Callback = function(state)
         JumpEnabled = state
+        UpdateStats() -- Forzar actualización inmediata
     end
 })
 
-MoveSection:Slider({
+PlayerTab:Slider({
     Title = "Altura Jump",
     Value = { Min = 50, Max = 300, Default = 50 },
     Callback = function(value)
         JumpPower = value
+        if JumpEnabled then UpdateStats() end
     end
 })
 
--- ═══════════════════════════════════════════════════════════════
--- TAB 3: CONFIG
--- ═══════════════════════════════════════════════════════════════
+-- TAB 3: CONFIG (Keybind y Discord)
 local ConfigTab = Window:Tab({ Title = "Config", Icon = "settings" })
 
-local ConfigSection = ConfigTab:Section({
-    Title = "Settings",
-    Description = "Keybinds & Links",
-    Collapsed = false
-})
-
 -- Keybind para abrir/cerrar el Hub
-ConfigSection:Keybind({
+ConfigTab:Keybind({
     Title = "Tecla para Abrir/Cerrar Hub",
     Value = "RightShift", -- Tecla por defecto
     Callback = function(key)
-        print("Tecla cambiada a:", key)
-        -- Nota: WindUI maneja esto internamente si usas la propiedad ToggleKey en CreateWindow, 
-        -- pero este keybind es visual para el usuario.
-        -- Para cambiar la tecla real de toggle de WindUI, se hace así:
-        Window:SetToggleKey(key) 
+        -- WindUI maneja esto internamente, pero podemos notificar al usuario
+        WindUI:Notify({
+            Title = "Config",
+            Content = "Tecla cambiada a: " .. key,
+            Duration = 2
+        })
+        -- Actualizar la tecla de toggle de WindUI
+        Window:SetToggleKey(key)
     end
 })
 
 -- Link de Discord
-ConfigSection:Button({
+ConfigTab:Button({
     Title = "Copiar Discord",
     Icon = "message-circle",
     Callback = function()
@@ -246,9 +240,9 @@ ConfigSection:Button({
     end
 })
 
-ConfigSection:Paragraph({
+ConfigTab:Paragraph({
     Title = "Info",
-    Desc = "AstraHub Zz v1.0\nOptimized by Tz-hzk"
+    Desc = "AstraHub Zz v1.0\nOptimized by ᴄ++ | ʟᴏᴅɪɴɢ..."
 })
 
-print("🟢 AstraHub Zz cargado completamente.")
+print("🟢 ᴄ++ | ʟᴀᴅɴɢ... cargado completamente.")
