@@ -50,7 +50,6 @@ SubText.Parent = IntroFrame
 task.spawn(function()
     -- 1. Estado Inicial: Escala pequeña y transparente
     IntroText.TextTransparency = 1
-    IntroText.Scale = Vector2.new(0.5, 0.5) -- No existe propiedad Scale directa en TextLabel, usaremos UIScale
     
     local UIScale = Instance.new("UIScale")
     UIScale.Scale = 0.5 -- Empieza pequeño
