@@ -1,10 +1,10 @@
--- ASTRA HUB ZZ - Intro Visual Final (Sin Fondo, Rápida, Subtítulo Bajo)
+-- ASTRA HUB ZZ - Intro Visual Final (Con Stroke Negro y Subtítulo Alejado)
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
 -- ═══════════════════════════════════════════════════════════════
--- 1. INTRO VISUAL FINAL (Transparente + Rápida + Ajustada)
+-- 1. INTRO VISUAL FINAL (Stroke Negro + Subtítulo Alejado)
 -- ═══════════════════════════════════════════════════════════════
 
 -- Crear Pantalla de Carga
@@ -13,31 +13,36 @@ IntroGui.Name = "AstraIntroFinal"
 IntroGui.Parent = game.CoreGui
 IntroGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- NOTA: No creamos ningún Frame de fondo. Solo los textos.
-
--- Texto Principal (Grande y Elegante)
+-- Texto Principal (Grande, Elegante y con Borde Negro)
 local IntroText = Instance.new("TextLabel")
 IntroText.Size = UDim2.new(0, 700, 0, 120) -- Grande
 IntroText.Position = UDim2.new(0.5, -350, 0.5, -60) -- Centrado
 IntroText.BackgroundTransparency = 1 -- Sin fondo
 IntroText.Text = "ASTRAS HUB ZZ"
-IntroText.TextColor3 = Color3.fromRGB(255, 255, 255)
+IntroText.TextColor3 = Color3.fromRGB(255, 255, 255) -- Blanco
 IntroText.TextSize = 90 -- Muy grande
 IntroText.Font = Enum.Font.GothamBold
-IntroText.TextStrokeTransparency = 0.6 -- Borde suave para leerse bien
-IntroText.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+IntroText.TextStrokeTransparency = 0 -- <--- CAMBIO: Stroke totalmente visible
+IntroText.TextStrokeColor3 = Color3.fromRGB(0, 0, 0) -- <--- CAMBIO: Color Negro
 IntroText.Parent = IntroGui
 
--- Subtítulo Pequeño (Más Abajo)
+-- Agregar UIStroke explícito para asegurar el grosor de 2
+local TextStroke = Instance.new("UIStroke")
+TextStroke.Thickness = 2 -- <--- CAMBIO: Grosor de 2 píxeles
+TextStroke.Color = Color3.fromRGB(0, 0, 0) -- Negro
+TextStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+TextStroke.Parent = IntroText
+
+-- Subtítulo Pequeño (Más Abajo y Visible)
 local SubText = Instance.new("TextLabel")
 SubText.Size = UDim2.new(0, 300, 0, 30)
-SubText.Position = UDim2.new(0.5, -150, 0.5, 50) -- <--- CAMBIO: Bajado a Y=50 (antes era 30)
+SubText.Position = UDim2.new(0.5, -150, 0.5, 80) -- <--- CAMBIO: Bajado a Y=80 (más separado)
 SubText.BackgroundTransparency = 1 -- Sin fondo
 SubText.Text = "by Tz-hzk | v1.0"
-SubText.TextColor3 = Color3.fromRGB(220, 220, 220)
+SubText.TextColor3 = Color3.fromRGB(220, 220, 220) -- Gris claro
 SubText.TextSize = 26
 SubText.Font = Enum.Font.GothamMedium
-SubText.TextStrokeTransparency = 0.8
+SubText.TextStrokeTransparency = 0.8 -- Borde suave
 SubText.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
 SubText.Parent = IntroGui
 
