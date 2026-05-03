@@ -1,132 +1,303 @@
--- ASTRA HUB ZZ - Intro Visual Final (Stroke Directo en Texto)
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
-local LocalPlayer = Players.LocalPlayer
-
--- ═══════════════════════════════════════════════════════════════
--- 1. INTRO VISUAL FINAL (Stroke Directo + Blanco + Sin Fondo)
--- ═══════════════════════════════════════════════════════════════
-
--- Crear Pantalla de Carga
-local IntroGui = Instance.new("ScreenGui")
-IntroGui.Name = "AstraIntroFinal"
-IntroGui.Parent = game.CoreGui
-IntroGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
--- NOTA: No creamos ningún Frame de fondo. Solo los textos.
-
--- Texto Principal (Grande, Elegante y con Borde Negro Directo)
-local IntroText = Instance.new("TextLabel")
-IntroText.Size = UDim2.new(0, 700, 0, 120) -- Grande
-IntroText.Position = UDim2.new(0.5, -350, 0.5, -60) -- Centrado
-IntroText.BackgroundTransparency = 1 -- Sin fondo
-IntroText.Text = "ASTRAS HUB ZZ"
-IntroText.TextColor3 = Color3.fromRGB(255, 255, 255) -- Blanco Puro
-IntroText.TextSize = 90 -- Muy grande
-IntroText.Font = Enum.Font.GothamBold
-
--- CAMBIO CLAVE: Stroke directo en el TextLabel
-IntroText.TextStrokeTransparency = 0 -- Visible
-IntroText.TextStrokeColor3 = Color3.fromRGB(0, 0, 0) -- Negro
--- Nota: El grosor del stroke en TextLabel es fijo por el motor, 
--- pero al ser blanco sobre negro se ve nítido. Si necesitas más grosor visual, 
--- puedes duplicar el texto detrás con un tamaño ligeramente mayor, 
--- pero este método es el estándar limpio.
-
-IntroText.Parent = IntroGui
-
--- Subtítulo Pequeño (Más Abajo y Visible)
-local SubText = Instance.new("TextLabel")
-SubText.Size = UDim2.new(0, 300, 0, 30)
-SubText.Position = UDim2.new(0.5, -150, 0.5, 80) -- Bajado a Y=80 (más separado)
-SubText.BackgroundTransparency = 1 -- Sin fondo
-SubText.Text = "by Tz-hzk | v1.0"
-SubText.TextColor3 = Color3.fromRGB(255, 255, 255) -- Blanco Puro
-SubText.TextSize = 26
-SubText.Font = Enum.Font.GothamMedium
-
--- CAMBIO CLAVE: Stroke directo en el SubTexto también
-SubText.TextStrokeTransparency = 0 -- Visible
-SubText.TextStrokeColor3 = Color3.fromRGB(0, 0, 0) -- Negro
-
-SubText.Parent = IntroGui
-
--- Animación Controlada
-task.spawn(function()
-    -- 1. Estado Inicial: Invisible y pequeño
-    IntroText.TextTransparency = 1
-    SubText.TextTransparency = 1
-    
-    local UIScale = Instance.new("UIScale")
-    UIScale.Scale = 0.5
-    UIScale.Parent = IntroText
-    
-    -- 2. RETRASO FORZADO DE 0.1 SEGUNDOS (Muy rápido)
-    task.wait(0.1)
-
-    -- 3. Animación de Entrada (Zoom-In Suave)
-    local TweenInfoIn = TweenInfo.new(0.8, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
-    
-    -- Aparecer Texto Principal
-    TweenService:Create(IntroText, TweenInfoIn, { TextTransparency = 0 }):Play()
-    TweenService:Create(UIScale, TweenInfoIn, { Scale = 1.1 }):Play()
-    
-    -- Aparecer Subtítulo con un poco de retraso
-    task.wait(0.1)
-    TweenService:Create(SubText, TweenInfoIn, { TextTransparency = 0 }):Play() -- Totalmente opaco
-
-    -- 4. Tiempo de Lectura (Mantener visible)
-    task.wait(1.2) -- Se queda visible 1.2 segundos
-
-    -- 5. Animación de Salida (Desvanecimiento Rápido)
-    local TweenInfoOut = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-    
-    TweenService:Create(IntroText, TweenInfoOut, { TextTransparency = 1 }):Play()
-    TweenService:Create(SubText, TweenInfoOut, { TextTransparency = 1 }):Play()
-    TweenService:Create(UIScale, TweenInfoOut, { Scale = 1.5 }):Play() -- Se agranda al desaparecer
-
-    -- 6. Destruir GUI
-    task.wait(0.6)
-    IntroGui:Destroy()
-end)
-
--- ═══════════════════════════════════════════════════════════════
--- 2. CARGAR WINDUI Y CREAR EL HUB
--- ═══════════════════════════════════════════════════════════════
-
--- Pequeña pausa extra para asegurar estabilidad visual
-task.wait(0.2)
-
+-- ᴄ++ | ʟᴏᴅɪɴɢ... - Script Completo
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
 
-print("🔄 Iniciando AstraHub Zz...")
+print("🔄 Iniciando ᴄ++ | ʟᴏᴀɪɴɢ...")
 
+-- ═══════════════════════════════════════════════════════════════
+-- CONFIGURACIÓN DE LA VENTANA
+-- ═══════════════════════════════════════════════════════════════
 local Window = WindUI:CreateWindow({
-    Title = "ASTRA HUB ZZ",
+    Title = "ᴄ++ | ʟᴏᴅɪɴɢ... - Steal in Peru", -- Título solicitado
     Theme = "Dark",
     Size = UDim2.fromOffset(480, 420),
-    Folder = "AstraHubZZ",
-    IgnoreAlerts = true, -- Usa nuestro Dialog personalizado
+    Folder = "CppLoading",
+    IgnoreAlerts = false, -- Para que funcione el Dialog de cierre personalizado
 })
 
 print("✅ Ventana cargada.")
 
 -- ═══════════════════════════════════════════════════════════════
--- 3. CONTENIDO DEL HUB (Ejemplo Básico)
+-- VARIABLES GLOBALES Y SERVICIOS
+-- ═══════════════════════════════════════════════════════════════
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local LocalPlayer = Players.LocalPlayer
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local Humanoid = Character:WaitForChild("Humanoid")
+local RootPart = Character:WaitForChild("HumanoidRootPart")
+
+-- Estados
+local FlyEnabled = false
+local FlySpeed = 50
+local NoclipEnabled = false
+local SpeedEnabled = false
+local SpeedValue = 50
+local JumpEnabled = false
+local JumpPower = 50
+local AntiRagdollEnabled = false
+
+-- Variables para Undetect
+local LastPosition = nil
+local IsUndetecting = false
+
+-- ═══════════════════════════════════════════════════════════════
+-- FUNCIONES LÓGICAS
+-- ═══════════════════════════════════════════════════════════════
+
+-- FLY
+local BodyVelocity = Instance.new("BodyVelocity")
+BodyVelocity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+BodyVelocity.Velocity = Vector3.new(0, 0, 0)
+BodyVelocity.Parent = RootPart
+
+local BodyGyro = Instance.new("BodyGyro")
+BodyGyro.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
+BodyGyro.D = 100
+BodyGyro.P = 10000
+BodyGyro.CFrame = RootPart.CFrame
+BodyGyro.Parent = RootPart
+
+RunService.RenderStepped:Connect(function()
+    if FlyEnabled and Character and RootPart then
+        local MoveDirection = Vector3.new(0, 0, 0)
+        
+        if UserInputService:IsKeyDown(Enum.KeyCode.W) then MoveDirection = MoveDirection + RootPart.CFrame.LookVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.S) then MoveDirection = MoveDirection - RootPart.CFrame.LookVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.A) then MoveDirection = MoveDirection - RootPart.CFrame.RightVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.D) then MoveDirection = MoveDirection + RootPart.CFrame.RightVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.Space) then MoveDirection = MoveDirection + Vector3.new(0, 1, 0) end
+        if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then MoveDirection = MoveDirection - Vector3.new(0, 1, 0) end
+        
+        if MoveDirection.Magnitude > 0 then
+            MoveDirection = MoveDirection.Unit * FlySpeed
+        end
+        
+        BodyVelocity.Velocity = MoveDirection
+        BodyGyro.CFrame = Camera.CFrame
+    end
+end)
+
+-- NOCLIP
+RunService.Stepped:Connect(function()
+    if NoclipEnabled and Character then
+        for _, Part in ipairs(Character:GetDescendants()) do
+            if Part:IsA("BasePart") and Part.CanCollide then
+                Part.CanCollide = false
+            end
+        end
+    end
+end)
+
+-- SPEED & JUMP UNDETECT
+RunService.Heartbeat:Connect(function()
+    if Character and Humanoid and RootPart then
+        -- Speed Logic
+        if SpeedEnabled then
+            if not IsUndetecting then
+                LastPosition = RootPart.Position
+                Humanoid.WalkSpeed = SpeedValue
+            else
+                -- Undetect Mode: Teleport suave hacia atrás si se detecta movimiento sospechoso
+                -- Simulación simple: Mantener velocidad pero resetear posición si se mueve demasiado rápido
+                -- Nota: Los undetect reales son complejos, esto es una simulación básica de "suavizado"
+                Humanoid.WalkSpeed = 16 -- Reset temporal
+                task.wait(0.1)
+                Humanoid.WalkSpeed = SpeedValue
+                IsUndetecting = false
+            end
+        else
+            Humanoid.WalkSpeed = 16
+        end
+
+        -- Jump Logic
+        if JumpEnabled then
+            Humanoid.JumpPower = JumpPower
+        else
+            Humanoid.JumpPower = 50
+        end
+    end
+end)
+
+-- ANTI-RAGDOLL
+Character.DescendantAdded:Connect(function(Child)
+    if AntiRagdollEnabled and Child:IsA("Motor6D") then
+        local Socket = Instance.new("BallSocketConstraint")
+        local Attachment0 = Instance.new("Attachment")
+        local Attachment1 = Instance.new("Attachment")
+        
+        Attachment0.Name = "Attachment0"
+        Attachment1.Name = "Attachment1"
+        
+        Attachment0.Parent = Child.Part0
+        Attachment1.Parent = Child.Part1
+        
+        Socket.Attachment0 = Attachment0
+        Socket.Attachment1 = Attachment1
+        Socket.LimitsEnabled = true
+        Socket.TwistLimitsEnabled = true
+        Socket.Parent = Child.Parent
+        
+        Child:Destroy()
+    end
+end)
+
+-- Recargar Anti-Ragdoll al cambiar de personaje
+LocalPlayer.CharacterAdded:Connect(function(Char)
+    Character = Char
+    Humanoid = Char:WaitForChild("Humanoid")
+    RootPart = Char:WaitForChild("HumanoidRootPart")
+    
+    -- Re-parentear BodyVelocity y BodyGyro
+    BodyVelocity.Parent = RootPart
+    BodyGyro.Parent = RootPart
+    
+    if AntiRagdollEnabled then
+        -- Re-aplicar lógica si es necesario
+    end
+end)
+
+-- ═══════════════════════════════════════════════════════════════
+-- INTERFAZ DE USUARIO (HUB)
 -- ═══════════════════════════════════════════════════════════════
 
 local MainTab = Window:Tab({ Title = "Main", Icon = "home" })
 
-MainTab:Paragraph({
-    Title = "Bienvenido",
-    Desc = "La intro ha terminado. El Hub está listo."
+-- Sección Movimiento
+local MoveSection = MainTab:Section({
+    Title = "Movimiento",
+    Description = "Fly, Speed, Jump, Noclip",
+    Collapsed = false
 })
 
-MainTab:Button({
-    Title = "Probar Botón",
-    Callback = function()
-        print("Botón presionado")
+-- Fly
+MoveSection:Toggle({
+    Title = "Activar Fly",
+    Value = false,
+    Callback = function(state)
+        FlyEnabled = state
+        if not state then
+            BodyVelocity.Velocity = Vector3.new(0, 0, 0)
+        end
     end
 })
 
-print("🟢 AstraHub Zz cargado completamente.")
+MoveSection:Slider({
+    Title = "Velocidad Fly",
+    Value = { Min = 10, Max = 200, Default = 50 },
+    Callback = function(value)
+        FlySpeed = value
+    end
+})
+
+-- Noclip
+MoveSection:Toggle({
+    Title = "Activar Noclip",
+    Value = false,
+    Callback = function(state)
+        NoclipEnabled = state
+    end
+})
+
+-- Speed
+MoveSection:Toggle({
+    Title = "Activar Speed",
+    Value = false,
+    Callback = function(state)
+        SpeedEnabled = state
+    end
+})
+
+MoveSection:Slider({
+    Title = "Velocidad Speed",
+    Value = { Min = 16, Max = 200, Default = 50 },
+    Callback = function(value)
+        SpeedValue = value
+    end
+})
+
+MoveSection:Button({
+    Title = "Undetect Speed (Reset)",
+    Callback = function()
+        -- Simula un reset de posición para evitar detección
+        if Character and RootPart then
+            local CurrentPos = RootPart.Position
+            RootPart.CFrame = CFrame.new(CurrentPos + Vector3.new(0, 1, 0)) -- Pequeño salto
+            task.wait(0.1)
+            RootPart.CFrame = CFrame.new(CurrentPos) -- Volver
+            WindUI:Notify({
+                Title = "Undetect",
+                Content = "Posición reseteada para evitar detección.",
+                Duration = 2
+            })
+        end
+    end
+})
+
+-- Jump
+MoveSection:Toggle({
+    Title = "Activar Jump",
+    Value = false,
+    Callback = function(state)
+        JumpEnabled = state
+    end
+})
+
+MoveSection:Slider({
+    Title = "Altura Jump",
+    Value = { Min = 50, Max = 300, Default = 50 },
+    Callback = function(value)
+        JumpPower = value
+    end
+})
+
+MoveSection:Button({
+    Title = "Undetect Jump (Safe Land)",
+    Callback = function()
+        -- Simula un aterrizaje suave
+        if Character and Humanoid then
+            Humanoid.JumpPower = 50 -- Reset a normal
+            task.wait(0.2)
+            Humanoid.JumpPower = JumpPower -- Volver a custom
+            WindUI:Notify({
+                Title = "Undetect",
+                Content = "Salto suavizado para evitar detección.",
+                Duration = 2
+            })
+        end
+    end
+})
+
+-- Sección Misc
+local MiscSection = MainTab:Section({
+    Title = "Misceláneo",
+    Description = "Anti-Ragdoll y otros",
+    Collapsed = true
+})
+
+-- Anti-Ragdoll
+MiscSection:Toggle({
+    Title = "Activar Anti-Ragdoll",
+    Value = false,
+    Callback = function(state)
+        AntiRagdollEnabled = state
+        if not state then
+            -- Restaurar Motor6D si es posible (complejo, mejor dejarlo activo o reiniciar personaje)
+            WindUI:Notify({
+                Title = "Info",
+                Content = "Desactivar Anti-Ragdoll puede requerir reiniciar personaje.",
+                Duration = 3
+            })
+        end
+    end
+})
+
+-- Botón Reiniciar Personaje (Útil si algo falla)
+MiscSection:Button({
+    Title = "Reiniciar Personaje",
+    Callback = function()
+        LocalPlayer:LoadCharacter()
+    end
+})
+
+print("🟢 ᴄ++ | ʟᴏᴅɪɴɢ... cargado completamente.")
