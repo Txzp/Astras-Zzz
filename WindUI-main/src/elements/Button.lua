@@ -64,13 +64,6 @@ function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded,
 			Size = UDim2.new(1, 0, 1, 0),
 			ImageTransparency = 0.6,
 			Name = "Outline",
-		}, {
-			New("UIStroke", {
-				Color = Color3.fromRGB(255, 255, 255),
-				Transparency = 0.5,
-				Thickness = 1,
-				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-			})
 		}),
 
 		Creator.NewRoundFrame(Radius, "Squircle", {
