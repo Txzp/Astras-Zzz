@@ -86,13 +86,6 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 		Parent = HueDragHolder,
 		BackgroundColor3 = Colorpicker.Default
 	}, {
-        New("UIStroke", {
-            Thickness = 2,
-            Transparency = .1,
-            ThemeTag = {
-			    Color = "Text",
-            },
-        }),
         New("UICorner", {
             CornerRadius = UDim.new(1,0),
         })
