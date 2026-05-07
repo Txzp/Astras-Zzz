@@ -1,161 +1,58 @@
--- AstraHub Zz - Script con Debug Avanzado para Keybind
+-- Testing KeySystem Nativo de WindUI
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
 
-print("🔄 Iniciando AstraHub Zz con Debug Avanzado...")
+print("🔄 [KEYSYSTEM TEST] Iniciando...")
 
 -- ═══════════════════════════════════════════════════════════════
--- CONFIGURACIÓN DE LA VENTANA
+-- CONFIGURACIÓN DE LA VENTANA CON KEYSYSTEM
 -- ═══════════════════════════════════════════════════════════════
+
+-- OPCIÓN 1: Usar KeySystem con URL (Recomendado para producción)
+-- Necesitas un archivo JSON en GitHub o un servidor que devuelva las claves válidas.
+-- Ejemplo de formato JSON: ["123", "456", "789"]
+
+-- OPCIÓN 2: Simulación Local (Si no tienes URL)
+-- Algunas versiones de WindUI permiten pasar una tabla de claves localmente.
+-- Si tu versión no lo soporta, usaremos un truco simple.
+
 local Window = WindUI:CreateWindow({
-    Title = "AstraHub Zz [DEBUG]",
+    Title = "AstraHub Zz [KEYSYSTEM]",
     Theme = "Dark",
     Size = UDim2.fromOffset(480, 420),
     Folder = "AstraHubZz",
-    IgnoreAlerts = false,
+    
+    -- ACTIVAR KEYSYSTEM
+    -- Si tu WindUI soporta 'KeySystem' como booleano, pon true.
+    -- Si requiere URL, pon la URL de tu archivo JSON de claves.
+    KeySystem = true, 
+    
+    -- URL de claves (Ejemplo: Un archivo raw de GitHub con ["123"])
+    -- Para este test, usaremos una URL de ejemplo que contiene "123".
+    -- Si no tienes una, crea un archivo en tu repo llamado 'keys.json' con: ["123"]
+    KeyURL = "https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/keys.json", 
 })
 
-print("✅ Ventana cargada.")
+print("✅ [KEYSYSTEM TEST] Ventana creada con KeySystem.")
 
 -- ═══════════════════════════════════════════════════════════════
--- CONSOLA DE LOGS VISUAL (Funcional)
--- ═══════════════════════════════════════════════════════════════
-local DebugTab = Window:Tab({ Title = "Debug Console", Icon = "terminal" })
-
--- Creamos un ScrollingFrame manual para los logs
-local LogContainer = Instance.new("ScrollingFrame")
-LogContainer.Size = UDim2.new(1, 0, 1, 0)
-LogContainer.BackgroundTransparency = 1
-LogContainer.ScrollBarThickness = 4
-LogContainer.ScrollBarImageColor3 = Color3.fromRGB(50, 50, 50)
-LogContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
-LogContainer.AutomaticCanvasSize = Enum.AutomaticSize.Y
-LogContainer.ClipsDescendants = true
-LogContainer.Parent = DebugTab.ContainerFrame
-
-local LogLayout = Instance.new("UIListLayout")
-LogLayout.Padding = UDim.new(0, 4)
-LogLayout.SortOrder = Enum.SortOrder.LayoutOrder
-LogLayout.Parent = LogContainer
-
-local function AddLog(message, type)
-    local color = Color3.fromRGB(255, 255, 255)
-    if type == "ERROR" then color = Color3.fromRGB(255, 50, 50) end
-    if type == "SUCCESS" then color = Color3.fromRGB(50, 255, 50) end
-    if type == "WARN" then color = Color3.fromRGB(255, 165, 0) end
-    if type == "INFO" then color = Color3.fromRGB(100, 200, 255) end
-    
-    print("[" .. type .. "] " .. message)
-    
-    local LogLabel = Instance.new("TextLabel")
-    LogLabel.Size = UDim2.new(1, -10, 0, 20)
-    LogLabel.BackgroundTransparency = 0.8
-    LogLabel.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-    LogLabel.Text = "[" .. os.date("%H:%M:%S") .. "] " .. message
-    LogLabel.TextColor3 = color
-    LogLabel.TextSize = 14
-    LogLabel.Font = Enum.Font.Code
-    LogLabel.TextXAlignment = "Left"
-    LogLabel.TextYAlignment = "Center"
-    LogLabel.BorderSizePixel = 0
-    LogLabel.Parent = LogContainer
-    
-    task.spawn(function()
-        task.wait()
-        LogContainer.CanvasPosition = Vector2.new(0, LogContainer.AbsoluteCanvasSize.Y)
-    end)
-end
-
-AddLog("Consola de Debug iniciada...", "SUCCESS")
-
--- ═══════════════════════════════════════════════════════════════
--- INSPECCIÓN INTERNA DE WINDUI PARA ENCONTRAR EL BUG
--- ═══════════════════════════════════════════════════════════════
-
-AddLog("Inspeccionando objeto Window...", "INFO")
-
--- Verificar si Window tiene ToggleKey
-if Window.ToggleKey then
-    AddLog("✅ Window.ToggleKey EXISTE: " .. Window.ToggleKey.Name, "SUCCESS")
-else
-    AddLog("❌ Window.ToggleKey NO EXISTE (es NIL)", "ERROR")
-end
-
--- Verificar si Window tiene SetToggleKey
-if Window.SetToggleKey then
-    AddLog("✅ Window.SetToggleKey EXISTE", "SUCCESS")
-else
-    AddLog("❌ Window.SetToggleKey NO EXISTE", "ERROR")
-end
-
--- Intentar listar todas las propiedades de Window
-AddLog("Propiedades de Window:", "INFO")
-for key, value in pairs(Window) do
-    if typeof(value) ~= "function" then
-        AddLog("  - " .. tostring(key) .. ": " .. tostring(value), "INFO")
-    end
-end
-
--- Intentar listar métodos de Window
-AddLog("Métodos de Window:", "INFO")
-for key, value in pairs(Window) do
-    if typeof(value) == "function" then
-        AddLog("  - " .. tostring(key) .. "()", "INFO")
-    end
-end
-
--- ═══════════════════════════════════════════════════════════════
--- MONITOREO DE TECLAS (RAW INPUT)
--- ═══════════════════════════════════════════════════════════════
-
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if input.UserInputType == Enum.UserInputType.Keyboard then
-        local keyName = input.KeyCode.Name
-        
-        if keyName == "RightShift" or keyName == "Q" or keyName == "Insert" or keyName == "Home" then
-            AddLog("Tecla Detectada: " .. keyName .. " | GameProcessed: " .. tostring(gameProcessed), "WARN")
-            
-            if Window.ToggleKey then
-                if Window.ToggleKey == input.KeyCode then
-                    AddLog("✅ MATCH: La tecla coincide con Window.ToggleKey (" .. Window.ToggleKey.Name .. ")", "SUCCESS")
-                else
-                    AddLog("❌ NO MATCH: Window.ToggleKey es " .. Window.ToggleKey.Name, "ERROR")
-                end
-            else
-                AddLog("❌ ERROR: Window.ToggleKey es NIL", "ERROR")
-            end
-        end
-    end
-end)
-
--- ═══════════════════════════════════════════════════════════════
--- TAB PRINCIPAL Y KEYBIND TEST
+-- TAB PRINCIPAL (Solo visible si la clave es correcta)
 -- ═══════════════════════════════════════════════════════════════
 local MainTab = Window:Tab({ Title = "Main", Icon = "home" })
 
 MainTab:Paragraph({
-    Title = "Prueba de Keybind",
-    Desc = "La consola de Debug mostrará qué propiedades existen en Window."
+    Title = "✅ Acceso Concedido",
+    Desc = "Has ingresado la clave correcta: 123\nEl KeySystem nativo de WindUI está funcionando."
 })
 
--- Botón para probar SetToggleKey manualmente
 MainTab:Button({
-    Title = "Probar Window:SetToggleKey(RightShift)",
+    Title = "Probar Función",
     Callback = function()
-        if Window.SetToggleKey then
-            Window:SetToggleKey(Enum.KeyCode.RightShift)
-            AddLog("Se llamó Window:SetToggleKey(RightShift)", "WARN")
-            AddLog("Nuevo valor de Window.ToggleKey: " .. (Window.ToggleKey and Window.ToggleKey.Name or "NIL"), "SUCCESS")
-        else
-            AddLog("❌ No se puede llamar a Window:SetToggleKey porque no existe", "ERROR")
-        end
+        WindUI:Notify({
+            Title = "Éxito",
+            Content = "El Hub está desbloqueado.",
+            Duration = 2
+        })
     end
 })
 
--- Mostrar estado final
-task.wait(1)
-AddLog("Estado Final Window.ToggleKey: " .. (Window.ToggleKey and Window.ToggleKey.Name or "NIL"), "WARN")
-AddLog("Estado Final Window.SetToggleKey: " .. (Window.SetToggleKey and "EXISTE" or "NO EXISTE"), "WARN")
-
-print("🟢 AstraHub Zz con Debug Avanzado cargado completamente.")
+print("🟢 [KEYSYSTEM TEST] Listo. Ingresa la clave '123' cuando se solicite.")
