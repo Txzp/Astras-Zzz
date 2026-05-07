@@ -19,7 +19,7 @@ local Window = WindUI:CreateWindow({
         Enabled = true, -- Activa el sistema
         Title = "🔒 AstraHub Zz", -- Título de la ventana de clave
         Note = "Ingresa la clave para acceder al hub.", -- Nota opcional
-        Key = {"123"}, -- Tabla de claves válidas (puedes añadir más: {"123", "456"})
+        Key = {"1234"}, -- Tabla de claves válidas (puedes añadir más: {"123", "456"})
         SaveKey = true, -- Guarda la clave en un archivo local para no pedirla de nuevo
         -- KeyValidator = function(key) return key == "123" end -- Opcional: Validación personalizada
     }
