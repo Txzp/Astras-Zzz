@@ -1,10 +1,10 @@
--- AstraHub Zz - Con KeySystem Nativo de WindUI (Clave: 123)
+-- Testing KeySystem NATIVO de WindUI (Usando KeySystem.lua interno)
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/Astras-Zzz/main/WindUI-main/dist/main.lua"))()
 
-print("🔄 [KEYSYSTEM NATIVO] Iniciando...")
+print("🔄 [KEYSYSTEM NATIVO] Iniciando test...")
 
 -- ═══════════════════════════════════════════════════════════════
--- CONFIGURACIÓN PARA ACTIVAR EL KEYSYSTEM NATIVO DE WINDUI
+-- CONFIGURACIÓN DE LA VENTANA CON KEYSYSTEM NATIVO
 -- ═══════════════════════════════════════════════════════════════
 
 local Window = WindUI:CreateWindow({
@@ -12,40 +12,52 @@ local Window = WindUI:CreateWindow({
     Theme = "Dark",
     Size = UDim2.fromOffset(480, 420),
     Folder = "AstraHubZz",
-    IgnoreAlerts = false,
+    IgnoreAlerts = false, -- Importante para que los dialogs funcionen bien
     
-    -- ✅ ACTIVACIÓN DEL KEYSYSTEM NATIVO DE WINDUI
+    -- ✅ ACTIVACIÓN DEL KEYSYSTEM NATIVO
+    -- Esto le dice a main.lua que cargue KeySystem.lua antes de mostrar el Hub
     KeySystem = {
-        Enabled = true, -- Activa el sistema
-        Title = "🔒 AstraHub Zz", -- Título de la ventana de clave
-        Note = "Ingresa la clave para acceder al hub.", -- Nota opcional
-        Key = {"1234"}, -- Tabla de claves válidas (puedes añadir más: {"123", "456"})
-        SaveKey = true, -- Guarda la clave en un archivo local para no pedirla de nuevo
-        -- KeyValidator = function(key) return key == "123" end -- Opcional: Validación personalizada
+        Enabled = true,           -- Activa el sistema
+        Title = "🔒 AstraHub Zz", -- Título que aparece en la ventana de clave
+        Note = "Ingresa la clave para acceder.", -- Texto pequeño debajo del título
+        Key = {"123"},            -- La clave válida (puedes poner más: {"123", "abc"})
+        SaveKey = true,           -- Guarda la clave en un archivo local (.key) para no pedirla siempre
+        -- Thumbnail = {           -- Opcional: Si quieres una imagen a la izquierda
+        --     Image = "rbxassetid://...", 
+        --     Width = 200
+        -- }
     }
 })
 
-print("✅ [KEYSYSTEM NATIVO] Ventana creada con KeySystem activado.")
+print("✅ [KEYSYSTEM NATIVO] Ventana configurada. Esperando interacción con la UI nativa.")
 
 -- ═══════════════════════════════════════════════════════════════
--- TAB PRINCIPAL (Solo visible si la clave es correcta)
+-- TAB PRINCIPAL (Solo se crea si la clave es correcta)
 -- ═══════════════════════════════════════════════════════════════
 local MainTab = Window:Tab({ Title = "Main", Icon = "home" })
 
 MainTab:Paragraph({
     Title = "✅ Acceso Concedido",
-    Desc = "Has ingresado la clave correcta usando el sistema nativo de WindUI."
+    Desc = "Has superado el KeySystem nativo de WindUI.\nLa clave '123' fue aceptada."
 })
 
 MainTab:Button({
-    Title = "Probar Función",
+    Title = "Probar Notificación",
     Callback = function()
         WindUI:Notify({
             Title = "Éxito",
-            Content = "El Hub nativo con KeySystem está funcionando.",
+            Content = "El Hub está funcionando correctamente.",
             Duration = 2
         })
     end
 })
 
-print("🟢 [KEYSYSTEM NATIVO] Listo. Debería aparecer la ventana de clave nativa de WindUI.")
+MainTab:Toggle({
+    Title = "Activar Función de Prueba",
+    Value = false,
+    Callback = function(state)
+        print("Función de prueba:", state)
+    end
+})
+
+print("🟢 [KEYSYSTEM NATIVO] Test completado. Si ves esto, el Hub cargó tras la clave.")
