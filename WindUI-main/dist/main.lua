@@ -13930,14 +13930,6 @@ end
 
 local ay=true
 
-if aw.KeySystem and aw.KeySystem.Enabled then
-local keySystem = require('../src/components/KeySystem')
-ay = false
-keySystem.new(aw, aw.Folder or aw.Title, function(success)
-ay = success
-end)
-end
-
 local az=aa.Themes[aw.Theme or"Dark"]
 
 
