@@ -2154,9 +2154,9 @@ local ab=a.load'c'
 local ac=ab.New
 local ad=ab.Tween
 
-function aa.New(ae,af,ag,ah,ai,aj,ak,al,amColor)
+function aa.New(ae,af,ag,ah,ai,aj,ak,al)
 ah=ah or"Primary"
-local aRadius=al or(not ak and 10 or 99)
+local am=al or(not ak and 10 or 99)
 local an
 if af and af~=""then
 an=ac("ImageLabel",{
@@ -2179,11 +2179,11 @@ AutomaticSize="X",
 Parent=ai,
 BackgroundTransparency=1,
 },{
-ab.NewRoundFrame(aRadius,"Squircle",{
+ab.NewRoundFrame(am,"Squircle",{
 ThemeTag={
-ImageColor3=not amColor and ah~="White"and"Button"or nil,
+ImageColor3=ah~="White"and"Button"or nil,
 },
-ImageColor3=amColor or (ah=="White"and Color3.new(1,1,1)) or nil,
+ImageColor3=ah=="White"and Color3.new(1,1,1)or nil,
 Size=UDim2.new(1,0,1,0),
 Name="Squircle",
 ImageTransparency=ah=="Primary"and 0 or ah=="White"and 0 or 0.9,
@@ -2262,10 +2262,9 @@ BackgroundTransparency=1,
 FontFace=Font.new(ab.Font,Enum.FontWeight.SemiBold),
 Text=ae or"Button",
 ThemeTag={
-TextColor3=(not amColor and ah~="Primary"and ah~="White")and"Text",
+TextColor3=(ah~="Primary"and ah~="White")and"Text",
 },
-TextColor3=amColor and Color3.new(1,1,1)
-or ah=="Primary"and Color3.new(1,1,1)
+TextColor3=ah=="Primary"and Color3.new(1,1,1)
 or ah=="White"and Color3.new(0,0,0)
 or nil,
 AutomaticSize="XY",
@@ -13332,7 +13331,7 @@ local Q={}
 
 for R,S in next,H.Buttons do
 local T=
-ap(S.Title,S.Icon,S.Callback,S.Variant,P,J,true,nil,S.Color)
+ap(S.Title,S.Icon,S.Callback,S.Variant,P,J,true)
 table.insert(Q,T)
 T.Size=UDim2.new(1,0,1,0)
 end
