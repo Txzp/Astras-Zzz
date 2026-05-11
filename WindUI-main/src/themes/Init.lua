@@ -4,11 +4,11 @@ return function(WindUI, Creator)
 			Name = "Dark",
 
 			Accent = Color3.fromHex("#18181b"),
-			Dialog = Color3.fromHex("#161616"),
+			Dialog = Color3.fromHex("#0F0F0F"),
 			Outline = Color3.fromHex("#FFFFFF"),
 			Text = Color3.fromHex("#FFFFFF"),
 			Placeholder = Color3.fromHex("#7a7a7a"),
-			Background = Color3.fromHex("#101010"),
+			Background = Color3.fromHex("#050505"),
 			Button = Color3.fromHex("#52525b"),
 			Icon = Color3.fromHex("#a1a1aa"),
 			Toggle = Color3.fromHex("#33C759"),
@@ -25,8 +25,10 @@ return function(WindUI, Creator)
 			LabelBackground = Color3.fromHex("#000000"),
 			LabelBackgroundTransparency = 0.83,
 
-			ElementBackground = Color3.fromHex("#2A2A2C"),
+			ElementBackground = Color3.fromHex("#0F0F0F"),
 			ElementBackgroundTransparency = 0,
+			ElementBorder = Color3.fromHex("#191919"),
+			ElementBorderTransparency = 0.5,
 		},
 
 		Light = {
@@ -167,67 +169,61 @@ return function(WindUI, Creator)
 			Name = "Amber",
 
 			Accent = WindUI:Gradient({
-				["0"] = { Color = Color3.fromHex("#b45309"), Transparency = 0 },
-				["100"] = { Color = Color3.fromHex("#d97706"), Transparency = 0 },
-			}, { Rotation = 45 }),
-
-			Dialog = WindUI:Gradient({
-				["0"] = { Color = Color3.fromHex("#451a03"), Transparency = 0 },
-				["100"] = { Color = Color3.fromHex("#6b2e05"), Transparency = 0 },
-			}, { Rotation = 90 }),
-
-			--Outline = WindUI:Gradient({
-			--	["0"] = { Color = Color3.fromHex("#fde68a"), Transparency = 0 },
-			--	["100"] = { Color = Color3.fromHex("#fcd34d"), Transparency = 0 },
-			--}, { Rotation = 45 }),
-
-			Text = WindUI:Gradient({
-				["0"] = { Color = Color3.fromHex("#fffbeb"), Transparency = 0 },
-				["100"] = { Color = Color3.fromHex("#fff7ed"), Transparency = 0 },
-			}, { Rotation = 45 }),
-
-			Placeholder = WindUI:Gradient({
-				["0"] = { Color = Color3.fromHex("#d1a326"), Transparency = 0 },
-				["100"] = { Color = Color3.fromHex("#fbbf24"), Transparency = 0 },
-			}, { Rotation = 45 }),
-
-			Background = WindUI:Gradient({
-				["0"] = { Color = Color3.fromHex("#1c1003"), Transparency = 0 },
-				["100"] = { Color = Color3.fromHex("#3f210d"), Transparency = 0 },
-			}, { Rotation = 90 }),
-
-			Button = WindUI:Gradient({
-				["0"] = { Color = Color3.fromHex("#d97706"), Transparency = 0 },
-				["100"] = { Color = Color3.fromHex("#f59e0b"), Transparency = 0 },
-			}, { Rotation = 45 }),
-
-			Icon = Color3.fromHex("#f59e0b"),
-
-			Toggle = WindUI:Gradient({
-				["0"] = { Color = Color3.fromHex("#d97706"), Transparency = 0 },
-				["100"] = { Color = Color3.fromHex("#f59e0b"), Transparency = 0 },
-			}, { Rotation = 45 }),
-
-			Slider = Color3.fromHex("#d97706"),
-
-			Checkbox = WindUI:Gradient({
-				["0"] = { Color = Color3.fromHex("#d97706"), Transparency = 0 },
-				["100"] = { Color = Color3.fromHex("#fbbf24"), Transparency = 0 },
-			}, { Rotation = 45 }),
-
-			PanelBackground = Color3.fromHex("#FFFFFF"),
-			PanelBackgroundTransparency = 0.95,
-
-			ElementBackground = Color3.fromHex("#3A2E22"),
-			ElementBackgroundTransparency = 0,
+			["0"] = { Color = Color3.fromHex("#b45309"), Transparency = 0 },
+			["100"] = { Color = Color3.fromHex("#d97706"), Transparency = 0 },
 		},
+
+		Dialog = WindUI:Gradient({
+		["0"] = { Color = Color3.fromHex("#451a03"), Transparency = 0 },
+		["100"] = { Color = Color3.fromHex("#6b2e05"), Transparency = 0 },
+	}}
+
+Text = WindUI:Gradient({
+["0"] = { Color = Color3.fromHex("#fffbeb"), Transparency = 0 },
+["100"] = { Color = Color3.fromHex("#fff7ed"), Transparency = 0 },
+}, { Rotation = 45 }),
+
+Placeholder = WindUI:Gradient({
+["0"] = { Color = Color3.fromHex("#d1a326"), Transparency = 0 },
+["100"] = { Color = Color3.fromHex("#fbbf24"), Transparency = 0 },
+}, { Rotation = 45 }),
+
+Background = WindUI:Gradient({
+["0"] = { Color = Color3.fromHex("#1c1003"), Transparency = 0 },
+["100"] = { Color = Color3.fromHex("#3f210d"), Transparency = 0 },
+}, { Rotation = 90 }),
+
+Button = WindUI:Gradient({
+["0"] = { Color = Color3.fromHex("#d97706"), Transparency = 0 },
+["100"] = { Color = Color3.fromHex("#f59e0b"), Transparency = 0 },
+}, { Rotation = 45 }),
+
+Icon = Color3.fromHex("#f59e0b"),
+
+Toggle = WindUI:Gradient({
+["0"] = { Color = Color3.fromHex("#d97706"), Transparency = 0 },
+["100"] = { Color = Color3.fromHex("#f59e0b"), Transparency = 0 },
+}, { Rotation = 45 }),
+
+Slider = Color3.fromHex("#d97706"),
+
+Checkbox = WindUI:Gradient({
+["0"] = { Color = Color3.fromHex("#d97706"), Transparency = 0 },
+["100"] = { Color = Color3.fromHex("#fbbf24"), Transparency = 0 },
+}, { Rotation = 45 }),
+
+PanelBackground = Color3.fromHex("#FFFFFF"),
+PanelBackgroundTransparency = 0.95,
+
+ElementBackground = Color3.fromHex("#3A2E22"),
+ElementBackgroundTransparency = 0,
+},
 
 		Emerald = {
 			Name = "Emerald",
 
 			Accent = Color3.fromHex("#047857"),
 			Dialog = Color3.fromHex("#022c22"),
-			--Outline = Color3.fromHex("#a7f3d0"),
 			Text = Color3.fromHex("#ecfdf5"),
 			Placeholder = Color3.fromHex("#3fbf8f"),
 			Background = Color3.fromHex("#011411"),
@@ -243,7 +239,6 @@ return function(WindUI, Creator)
 
 			Accent = Color3.fromHex("#1e3a8a"),
 			Dialog = Color3.fromHex("#0c1e42"),
-			--Outline = Color3.fromHex("#bfdbfe"),
 			Text = Color3.fromHex("#dbeafe"),
 			Placeholder = Color3.fromHex("#2f74d1"),
 			Background = Color3.fromHex("#0a0f1e"),
@@ -260,7 +255,6 @@ return function(WindUI, Creator)
 
 			Accent = Color3.fromHex("#b91c1c"),
 			Dialog = Color3.fromHex("#450a0a"),
-			--Outline = Color3.fromHex("#fca5a5"),
 			Text = Color3.fromHex("#fef2f2"),
 			Placeholder = Color3.fromHex("#6f757b"),
 			Background = Color3.fromHex("#0c0404"),
@@ -276,7 +270,6 @@ return function(WindUI, Creator)
 
 			Accent = Color3.fromHex("#fc9867"),
 			Dialog = Color3.fromHex("#1e1e1e"),
-			--Outline = Color3.fromHex("#78dce8"),
 			Text = Color3.fromHex("#fcfcfa"),
 			Placeholder = Color3.fromHex("#6f6f6f"),
 			Background = Color3.fromHex("#191622"),
@@ -286,17 +279,16 @@ return function(WindUI, Creator)
 			ElementBackground = Color3.fromHex("#323039"),
 			ElementBackgroundTransparency = 0,
 
-			Metadata = {
-				PullRequest = 23,
-			},
+		Metadata = {
+			PullRequest = 23,
 		},
+	}}
 
 		CottonCandy = {
 			Name = "Cotton Candy",
 
 			Accent = Color3.fromHex("#ec4899"),
 			Dialog = Color3.fromHex("#2d1b3d"),
-			--Outline = Color3.fromHex("#f9a8d4"),
 			Text = Color3.fromHex("#fdf2f8"),
 			Placeholder = Color3.fromHex("#8a5fd3"),
 			Background = Color3.fromHex("#1a0b2e"),
@@ -313,7 +305,6 @@ return function(WindUI, Creator)
 
 			Accent = Color3.fromHex("#342A1E"),
 			Dialog = Color3.fromHex("#291C13"),
-			--Outline = Color3.fromHex("#6B5A45"),
 			Text = Color3.fromHex("#F5EBDD"),
 			Placeholder = Color3.fromHex("#9C8A73"),
 			Background = Color3.fromHex("#1C1002"),
@@ -327,51 +318,50 @@ return function(WindUI, Creator)
 			ElementBackground = Color3.fromHex("#33291E"),
 			ElementBackgroundTransparency = 0,
 
-			Metadata = {
-				PullRequest = 52,
-			},
+		Metadata = {
+			PullRequest = 52,
 		},
+	}}
 
 		Rainbow = {
 			Name = "Rainbow",
 
 			Accent = WindUI:Gradient({
-				["0"] = { Color = Color3.fromHex("#00ff41"), Transparency = 0 },
-				["33"] = { Color = Color3.fromHex("#00ffff"), Transparency = 0 },
-				["66"] = { Color = Color3.fromHex("#0080ff"), Transparency = 0 },
-				["100"] = { Color = Color3.fromHex("#8000ff"), Transparency = 0 },
-			}, { Rotation = 45 }),
-
-			Dialog = WindUI:Gradient({
-				["0"] = { Color = Color3.fromHex("#ff0080"), Transparency = 0 },
-				["25"] = { Color = Color3.fromHex("#8000ff"), Transparency = 0 },
-				["50"] = { Color = Color3.fromHex("#0080ff"), Transparency = 0 },
-				["75"] = { Color = Color3.fromHex("#00ff80"), Transparency = 0 },
-				["100"] = { Color = Color3.fromHex("#ff8000"), Transparency = 0 },
-			}, { Rotation = 135 }),
-
-			--Outline = Color3.fromHex("#ffffff"),
-			Text = Color3.fromHex("#ffffff"),
-			Placeholder = Color3.fromHex("#00ff80"),
-
-			Background = WindUI:Gradient({
-				["0"] = { Color = Color3.fromHex("#ff0040"), Transparency = 0 },
-				["20"] = { Color = Color3.fromHex("#ff4000"), Transparency = 0 },
-				["40"] = { Color = Color3.fromHex("#ffff00"), Transparency = 0 },
-				["60"] = { Color = Color3.fromHex("#00ff40"), Transparency = 0 },
-				["80"] = { Color = Color3.fromHex("#0040ff"), Transparency = 0 },
-				["100"] = { Color = Color3.fromHex("#4000ff"), Transparency = 0 },
-			}, { Rotation = 90 }),
-
-			Button = WindUI:Gradient({
-				["0"] = { Color = Color3.fromHex("#ff0080"), Transparency = 0 },
-				["25"] = { Color = Color3.fromHex("#ff8000"), Transparency = 0 },
-				["50"] = { Color = Color3.fromHex("#ffff00"), Transparency = 0 },
-				["75"] = { Color = Color3.fromHex("#80ff00"), Transparency = 0 },
-				["100"] = { Color = Color3.fromHex("#00ffff"), Transparency = 0 },
-			}, { Rotation = 60 }),
-
-			Icon = Color3.fromHex("#ffffff"),
+			["0"] = { Color = Color3.fromHex("#00ff41"), Transparency = 0 },
+			["33"] = { Color = Color3.fromHex("#00ffff"), Transparency = 0 },
+			["66"] = { Color = Color3.fromHex("#0080ff"), Transparency = 0 },
+			["100"] = { Color = Color3.fromHex("#8000ff"), Transparency = 0 },
 		},
-	}
+
+		Dialog = WindUI:Gradient({
+		["0"] = { Color = Color3.fromHex("#ff0080"), Transparency = 0 },
+		["25"] = { Color = Color3.fromHex("#8000ff"), Transparency = 0 },
+		["50"] = { Color = Color3.fromHex("#0080ff"), Transparency = 0 },
+		["75"] = { Color = Color3.fromHex("#00ff80"), Transparency = 0 },
+		["100"] = { Color = Color3.fromHex("#ff8000"), Transparency = 0 },
+	}}
+
+Text = Color3.fromHex("#ffffff"),
+Placeholder = Color3.fromHex("#00ff80"),
+
+Background = WindUI:Gradient({
+["0"] = { Color = Color3.fromHex("#ff0040"), Transparency = 0 },
+["20"] = { Color = Color3.fromHex("#ff4000"), Transparency = 0 },
+["40"] = { Color = Color3.fromHex("#ffff00"), Transparency = 0 },
+["60"] = { Color = Color3.fromHex("#00ff40"), Transparency = 0 },
+["80"] = { Color = Color3.fromHex("#0040ff"), Transparency = 0 },
+["100"] = { Color = Color3.fromHex("#4000ff"), Transparency = 0 },
+}, { Rotation = 90 }),
+
+Button = WindUI:Gradient({
+["0"] = { Color = Color3.fromHex("#ff0080"), Transparency = 0 },
+["25"] = { Color = Color3.fromHex("#ff8000"), Transparency = 0 },
+["50"] = { Color = Color3.fromHex("#ffff00"), Transparency = 0 },
+["75"] = { Color = Color3.fromHex("#80ff00"), Transparency = 0 },
+["100"] = { Color = Color3.fromHex("#00ffff"), Transparency = 0 },
+}, { Rotation = 60 }),
+
+Icon = Color3.fromHex("#ffffff"),
+},
+}
 end
