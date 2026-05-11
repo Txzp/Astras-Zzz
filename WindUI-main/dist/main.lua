@@ -3662,11 +3662,11 @@ return{
 Dark={
 Name="Dark",
 Accent=Color3.fromHex"#18181b",
-Dialog=Color3.fromHex"#161616",
+Dialog=Color3.fromHex"#0F0F0F",
 Outline=Color3.fromHex"#FFFFFF",
 Text=Color3.fromHex"#FFFFFF",
 Placeholder=Color3.fromHex"#7a7a7a",
-Background=Color3.fromHex"#101010",
+Background=Color3.fromHex"#050505",
 Button=Color3.fromHex"#52525b", -- Botones normales (gris oscuro)
 Icon=Color3.fromHex"#a1a1aa",
 Toggle=Color3.fromRGB(88, 101, 242), -- <--- CAMBIADO A AZUL DISCORD (Esto es lo que querías)
@@ -3678,8 +3678,10 @@ SliderIcon=Color3.fromHex"#908F95",
 Primary=Color3.fromHex"#0091FF", -- Botones principales (azul claro por defecto)
 LabelBackground=Color3.fromHex"#000000",
 LabelBackgroundTransparency=0.83,
-ElementBackground=Color3.fromHex"#2A2A2C",
+ElementBackground=Color3.fromHex"#0F0F0F",
 ElementBackgroundTransparency=0,
+ElementBorder=Color3.fromHex"#191919",
+ElementBorderTransparency=0.5,
 },
 Light={
 Name="Light",
