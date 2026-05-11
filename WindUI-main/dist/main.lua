@@ -1412,7 +1412,7 @@ Image=b.Icon"x"[1],
 ImageRectSize=b.Icon"x"[2].ImageRectSize,
 ImageRectOffset=b.Icon"x"[2].ImageRectPosition,
 BackgroundTransparency=1,
-Size=UDim2.new(0,16,0,16),
+Size=UDim2.new(0,20,0,20),
 Position=UDim2.new(1,-f.UIPadding,0,f.UIPadding),
 AnchorPoint=Vector2.new(1,0),
 ThemeTag={
@@ -1500,7 +1500,7 @@ Size=UDim2.new(1,0,0,0),
 Position=UDim2.new(2,0,1,0),
 AnchorPoint=Vector2.new(0,1),
 AutomaticSize="Y",
-ImageTransparency=.05,
+ImageTransparency=0.3,
 ThemeTag={
 ImageColor3="Notification"
 },
@@ -3662,7 +3662,7 @@ return{
 Dark={
 Name="Dark",
 Accent=Color3.fromHex"#18181b",
-Dialog=Color3.fromHex"#0F0F0F",
+Dialog=Color3.fromHex"#1A1A1A",
 Outline=Color3.fromHex"#FFFFFF",
 Text=Color3.fromHex"#FFFFFF",
 Placeholder=Color3.fromHex"#7a7a7a",
@@ -3678,7 +3678,7 @@ SliderIcon=Color3.fromHex"#908F95",
 Primary=Color3.fromHex"#0091FF", -- Botones principales (azul claro por defecto)
 LabelBackground=Color3.fromHex"#000000",
 LabelBackgroundTransparency=0.83,
-ElementBackground=Color3.fromHex"#0F0F0F",
+ElementBackground=Color3.fromHex"#1A1A1A",
 ElementBackgroundTransparency=0,
 ElementBorder=Color3.fromHex"#191919",
 ElementBorderTransparency=0.5,
@@ -4951,7 +4951,7 @@ ac("UICorner",{
 CornerRadius=UDim.new(1,0)
 }),
 ac("UIStroke",{
-Thickness=1,
+Thickness=1.5,
 ApplyStrokeMode="Border",
 Color=Color3.new(1,1,1),
 Transparency=0,
@@ -10417,7 +10417,7 @@ end
 
 at=
 ah.Image(ap.Icon,ap.Icon..":"..ap.Title,0,Window.Folder,ap.__type,true,ap.IconThemed)
-at.Size=UDim2.new(0,16,0,16)
+at.Size=UDim2.new(0,20,0,20)
 at.ImageLabel.ImageTransparency=not ap.Locked and 0 or 0.7
 ar=-30
 
