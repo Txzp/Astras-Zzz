@@ -10310,6 +10310,16 @@ Padding=UDim.new(0,2+(Window.UIPadding/2)),
 FillDirection="Horizontal",
 VerticalAlignment="Center",
 }),
+ah.NewRoundFrame(3,"Squircle",{
+Size=UDim2.new(0,4,0,16),
+ImageColor3=Color3.fromRGB(255,255,255),
+Position=UDim2.new(0,-6,0.5,-8),
+Name="SelectionIndicator",
+Visible=false,
+LayoutOrder=0,
+},{
+
+}),
 aj("TextLabel",{
 Text=ap.Title,
 ThemeTag={
@@ -10425,6 +10435,8 @@ ar=-30
 
 
 end
+
+ap.UIElements.SelectionIndicator=ap.UIElements.Main.Frame.SelectionIndicator
 
 ap.UIElements.ContainerFrame=aj("ScrollingFrame",{
 Size=UDim2.new(1,0,1,ap.ShowTabTitle and-((Window.UIPadding*2.4)+12)or 0),
@@ -10771,6 +10783,9 @@ ImageTransparency="TabIconTransparency",
 },0.15)
 end
 aq.Selected=false
+if aq.UIElements.SelectionIndicator then
+ah(aq.UIElements.SelectionIndicator,0.15,{Visible=false},Enum.EasingStyle.Quart,Enum.EasingDirection.Out):Play()
+end
 end
 end
 ah.SetThemeTag(am.Tabs[ao].UIElements.Main,{
@@ -10790,6 +10805,10 @@ ImageTransparency="TabIconTransparencyActive",
 },0.15)
 end
 am.Tabs[ao].Selected=true
+if am.Tabs[ao].UIElements.SelectionIndicator then
+am.Tabs[ao].UIElements.SelectionIndicator.Visible=true
+ah(am.Tabs[ao].UIElements.SelectionIndicator,0.15,{Visible=true},Enum.EasingStyle.Quart,Enum.EasingDirection.Out):Play()
+end
 
 task.spawn(function()
 for ap,aq in next,am.Containers do
