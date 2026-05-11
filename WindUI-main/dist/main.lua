@@ -10342,6 +10342,21 @@ PaddingBottom=UDim.new(0,ap.TabPaddingY),
 }),
 },true)
 
+ap.UIElements.SelectionIndicator=aj("Frame",{
+Name="SelectionIndicator",
+Size=UDim2.new(0,4,0,16),
+Position=UDim2.new(0,-6,0.5,-8),
+AnchorPoint=Vector2.new(0.5,0.5),
+BackgroundColor3=Color3.fromRGB(255,255,255),
+BackgroundTransparency=1,
+LayoutOrder=0,
+Parent=ap.UIElements.Main.Frame,
+},{
+aj("UICorner",{
+CornerRadius=UDim.new(0,2),
+}),
+})
+
 local ar=0
 local as
 local at
@@ -10770,6 +10785,9 @@ ah.SetThemeTag(aq.UIElements.Icon.ImageLabel,{
 ImageTransparency="TabIconTransparency",
 },0.15)
 end
+if aq.UIElements.SelectionIndicator then
+ah.Tween(aq.UIElements.SelectionIndicator,0.15,{BackgroundTransparency=1}):Play()
+end
 aq.Selected=false
 end
 end
@@ -10788,6 +10806,9 @@ if am.Tabs[ao].UIElements.Icon and not am.Tabs[ao].IconColor then
 ah.SetThemeTag(am.Tabs[ao].UIElements.Icon.ImageLabel,{
 ImageTransparency="TabIconTransparencyActive",
 },0.15)
+end
+if am.Tabs[ao].UIElements.SelectionIndicator then
+ah.Tween(am.Tabs[ao].UIElements.SelectionIndicator,0.15,{BackgroundTransparency=0}):Play()
 end
 am.Tabs[ao].Selected=true
 
