@@ -2512,12 +2512,6 @@ PaddingBottom=UDim.new(0,aj.UIPadding),
 }),
 })
 
-local WindowStroke = Instance.new("UIStroke")
-WindowStroke.Color = Color3.fromRGB(255,255,255)
-WindowStroke.Thickness = 1.3
-WindowStroke.Transparency = 0
-WindowStroke.Parent = aj.UIElements.Main
-
 aj.UIElements.MainContainer=aa.NewRoundFrame(aj.UICorner,"Squircle",{
 Visible=false,
 
