@@ -7894,6 +7894,7 @@ end
 an.Value=ax.Original
 end
 Callback()
+ar:Close()
 end)
 elseif aq=="Menu"then
 if not ax.Locked then
