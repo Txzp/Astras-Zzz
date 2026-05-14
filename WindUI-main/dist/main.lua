@@ -6872,8 +6872,8 @@ ae.NewRoundFrame(99,"Squircle",{
 Name="Frame", -- BARRA DE PROGRESO
 Size=UDim2.new(ar,0,1,0),
 ImageTransparency=.1,
--- La barra se mantiene ROJA
-ImageColor3=Color3.fromRGB(255,0,0), 
+-- La barra se mantiene VERDE
+ImageColor3=Color3.fromRGB(0,255,106), 
 },{
 ae.NewRoundFrame(99,"Squircle",{
 Size=UDim2.new(0,ak.Window.NewElements and(al.ThumbSize*2)or(al.ThumbSize+2),0,ak.Window.NewElements and(al.ThumbSize+4)or(al.ThumbSize+2)),
@@ -7894,7 +7894,6 @@ end
 an.Value=ax.Original
 end
 Callback()
-ar:Close()
 end)
 elseif aq=="Menu"then
 if not ax.Locked then
