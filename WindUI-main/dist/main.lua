@@ -3670,7 +3670,7 @@ Background=Color3.fromHex"#050505",
 Button=Color3.fromHex"#52525b", -- Botones normales (gris oscuro)
 Icon=Color3.fromHex"#a1a1aa",
 Toggle=Color3.fromRGB(88, 101, 242), -- <--- CAMBIADO A AZUL DISCORD (Esto es lo que querías)
-Slider=Color3.fromRGB(255, 0, 0), -- <--- Cambiado a rojo
+Slider=Color3.fromRGB(255,0,0), -- <--- Cambiado a rojo
 Checkbox=Color3.fromRGB(88, 101, 242), -- Opcional: Checkboxes Azules
 PanelBackground=Color3.fromHex"#FFFFFF",
 PanelBackgroundTransparency=0.95,
@@ -6872,8 +6872,8 @@ ae.NewRoundFrame(99,"Squircle",{
 Name="Frame", -- BARRA DE PROGRESO
 Size=UDim2.new(ar,0,1,0),
 ImageTransparency=.1,
--- La barra se mantiene VERDE
-ImageColor3=Color3.fromRGB(0,255,106), 
+-- La barra se mantiene ROJA
+ImageColor3=Color3.fromRGB(255,0,0), 
 },{
 ae.NewRoundFrame(99,"Squircle",{
 Size=UDim2.new(0,ak.Window.NewElements and(al.ThumbSize*2)or(al.ThumbSize+2),0,ak.Window.NewElements and(al.ThumbSize+4)or(al.ThumbSize+2)),
