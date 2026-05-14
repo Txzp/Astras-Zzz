@@ -6707,18 +6707,6 @@ if aj then
 am:Set(ao,ap,aq or false)
 ak=ao
 ai.Value=ao
-local ar=ai.ToggleFrame and ai.ToggleFrame.UIElements and ai.ToggleFrame.UIElements.Main
-local as=ar and (ar:FindFirstChild("ToggleFrame") or ar:FindFirstChild("Frame"))
-if as and as:IsA("GuiObject") then
-if as.Name=="ToggleFrame" then
-as=as:FindFirstChild("Frame") or as
-end
-if as and as:IsA("GuiObject") then
-local at=game:GetService("TweenService")
-local au=TweenInfo.new(0.25,Enum.EasingStyle.Quint,Enum.EasingDirection.Out)
-at:Create(as,au,{Position=ao and UDim2.new(1,-18,0.5,-9) or UDim2.new(0,4,0.5,-9)}):Play()
-end
-end
 end
 end
 
