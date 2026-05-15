@@ -6714,6 +6714,8 @@ end
 
 ai:Set(ak,false,ah.Window.NewElements)
 
+ai.SetValue = ai.Set
+ai.SetState = ai.Set
 
 if ah.Window.NewElements and am.Animate then
 if ai.Type=="Toggle"then
