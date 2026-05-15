@@ -13428,8 +13428,8 @@ if not au.IgnoreAlerts then
 F=true
 
 au:Dialog{
-    Title="Close | AstrasHub", -- Título personalizado
-    Content="Are you sure you want to close the AstrasHub interface?", -- Descripción personalizada
+    Title="Close | GnsysHub", -- Título personalizado
+    Content="Are you sure you want to close the GnsysHub interface?", -- Descripción personalizada
     Buttons={
         {
             Title="Cancel",
