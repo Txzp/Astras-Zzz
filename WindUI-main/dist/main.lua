@@ -6234,7 +6234,7 @@ math.floor(aq/ap.Cols)*ap.Size.Y
 end
 
 local an=12
-local ao
+local aC=game:GetService"TweenService"
 if ag and ag~=""then
 ao=ac("ImageLabel",{
 Size=UDim2.new(0,13,0,13),
@@ -6383,24 +6383,26 @@ local au=aq.Size.X.Offset
 function am.Set(av,aw,ax,ay)
 if not ay then
 if aw then
-ad(aq.Frame,0.35,{
-Position=UDim2.new(0,au-at-2,0.5,0),
-},Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
+ local aD=UDim2.new(0,au-at-2,0.5,0)
+ pcall(function()
+ aC:Create(aq.Frame,TweenInfo.new(0.2,Enum.EasingStyle.Quad),{Position=aD}):Play()
+ end)
 ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Toggle"},0.15)
 ad(aq.Frame.Bar.Highlight.Glass,0.15,{ImageTransparency=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 else
-ad(aq.Frame,0.35,{
-Position=UDim2.new(0,2,0.5,0),
-},Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
-ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Text"},0.15)
+ local aD=UDim2.new(0,2,0.5,0)
+ pcall(function()
+ aC:Create(aq.Frame,TweenInfo.new(0.2,Enum.EasingStyle.Quad),{Position=aD}):Play()
+ end)
+ ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Text"},0.15)
 ad(aq.Frame.Bar.Highlight.Glass,0.15,{ImageTransparency=0.85},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end
 else
-if aw then
-aq.Frame.Position=UDim2.new(0,au-at-2,0.5,0)
-else
-aq.Frame.Position=UDim2.new(0,2,0.5,0)
-end
+ if aw then
+  aq.Frame.Position=UDim2.new(0,au-at-2,0.5,0)
+ else
+  aq.Frame.Position=UDim2.new(0,2,0.5,0)
+ end
 end
 
 if aw then
