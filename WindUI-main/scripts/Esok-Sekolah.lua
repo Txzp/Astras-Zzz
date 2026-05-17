@@ -28,12 +28,11 @@ local SettingsTab = Window:Tab({ Title = "Settings", Icon = "settings" })
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
 -- ============================================================
--- DETECCIÓN MÓVIL (CORRECTA)
+-- DETECCIÓN MÓVIL
 -- ============================================================
 local IsMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 
@@ -59,13 +58,10 @@ local flyToggleRef = nil
 -- Notificaciones
 local notificationsEnabled = true
 
--- Estado del hub (para restaurar al abrir)
-local savedUIState = nil
-
 -- OpenButton (móvil)
 local OpenButtonMain = nil
 
--- Loop único global para Speed y Jump
+-- Loop único global
 local movementConnection = nil
 
 -- ============================================================
@@ -97,14 +93,9 @@ local function setupOpenButton()
     OpenButtonMain.Visible = false
     OpenButtonMain.ZIndex = 10
     
-    -- Estilo redondeado
     local corner = Instance.new("UICorner", OpenButtonMain)
     corner.CornerRadius = UDim.new(1, 0)
     
-    -- Efecto hover/sombra
-    local shadow = Instance.new("UIShadow", OpenButtonMain)
-    
-    -- Arrastrable
     local dragging = false
     local dragStart = nil
     local startPos = nil
@@ -130,7 +121,6 @@ local function setupOpenButton()
         end
     end)
     
-    -- Abrir hub al presionar
     OpenButtonMain.MouseButton1Click:Connect(function()
         if Window then
             Window:Open()
@@ -140,7 +130,7 @@ local function setupOpenButton()
 end
 
 -- ============================================================
--- FUNCIONES UI (SIN DESTRUIR)
+-- FUNCIONES UI
 -- ============================================================
 local function closeUI()
     if IsMobile and OpenButtonMain then
@@ -161,7 +151,7 @@ local function openUI()
 end
 
 -- ============================================================
--- LOOP ÚNICO GLOBAL (SPEED + JUMP - SIN DUPLICAR)
+-- LOOP ÚNICO GLOBAL (SPEED + JUMP)
 -- ============================================================
 local function setupMovementLoop()
     if movementConnection then return end
@@ -173,14 +163,12 @@ local function setupMovementLoop()
         local humanoid = character:FindFirstChild("Humanoid")
         if not humanoid then return end
         
-        -- ===== SPEED =====
         if speedToggleRef and speedToggleRef.Value then
             humanoid.WalkSpeed = speedValue
         elseif humanoid.WalkSpeed ~= originalWalkSpeed then
             humanoid.WalkSpeed = originalWalkSpeed
         end
         
-        -- ===== JUMP =====
         if jumpToggleRef and jumpToggleRef.Value then
             humanoid.UseJumpPower = true
             humanoid.JumpPower = jumpValue
@@ -398,7 +386,7 @@ MovementTab:Slider({
 })
 
 MovementTab:Keybind({
-    Title = "Key (V)",
+    Title = "Key",
     Value = "V",
     Callback = function()
         if speedToggleRef then
@@ -407,7 +395,7 @@ MovementTab:Keybind({
     end
 })
 
--- Jump (SIN KEYBIND)
+-- Jump
 jumpToggleRef = MovementTab:Toggle({
     Title = "Jump Hack",
     Value = false,
@@ -514,12 +502,12 @@ SettingsTab:Keybind({
     Title = "Toggle UI",
     Value = "RightShift",
     Callback = function()
-        if Window then
-            if Window.Visible then
-                closeUI()
-            else
-                openUI()
-            end
+        uiOpen = not uiOpen
+
+        if uiOpen then
+            openUI()
+        else
+            closeUI()
         end
     end
 })
@@ -528,13 +516,9 @@ SettingsTab:Keybind({
 -- INICIALIZACIÓN
 -- ============================================================
 
--- Setup OpenButton (móvil)
 setupOpenButton()
-
--- Setup loop único global
 setupMovementLoop()
 
--- Override de Close/Open para móvil (sin destruir UI)
 if IsMobile then
     local originalClose = Window.Close
     local originalOpen = Window.Open
@@ -558,5 +542,3 @@ notify("GnsysHub Zz", "Loading GnsysHub Zz | Esok Sekolah", 3)
 
 print("[GnsysHub] Script cargado")
 print("[GnsysHub] Mobile: " .. (IsMobile and "SÍ" or "NO"))
-print("[GnsysHub] Speed + Jump: Loop único global")
-print("[GnsysHub] UI: No se destruye al cerrar")
